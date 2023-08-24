@@ -1,7 +1,4 @@
-T2_KneeAtive
-
-
-(T2 Knee Accessible Quantitative)
+T2_KneeAtive - (T2 Knee Accessible Quantitative) 
 
 
 INTRODUCTION
@@ -13,6 +10,7 @@ T2 is a promising MRI biomarker, with applications including detection of early 
 
 
 GOAL
+
 This toolbox is divided in two accessible tools: 
 
  - Sequence Optimization:
@@ -26,6 +24,7 @@ The present implementation aims to contribute towards the development of open-so
 . 
 
 Disclaimer: 
+
 We use the following toolboxes:
 
     https://mrirecon.github.io/bart/
