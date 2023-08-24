@@ -1,0 +1,637 @@
+ -------------------------------
+
+                        Itt: 0 
+
+Value for xTest of:         - TE = 25 (ms)
+Gradient values of  beta is      : -9931232.3318
+Value for xTest of:         - FA = 2.618       2.618       2.618       2.618       2.618       2.618 (radeans)
+Gradient values of alpha l is    : 317099.6322     -222566.0115      154779.6344      -79352.5624      43624.27301     -5706.208434
+Cost Function (vardT2) value is  : 2286931.2682
+Gradient (norm g_k) value is     : 9940405.054
+ -------------------------------
+
+
+ ---- Test while loop for GDA: 1 itterations ---- 
+
+                        Itt :1
+
+Value for xTest of:         - TE = 20.0344 (ms)
+Gradient values of  beta is      : -1254849.5239
+Value for xTest of:         - FA = 2.7765      2.5067      2.6954      2.5783      2.6398      2.6151 (radeans)
+Gradient values of alpha l is    : -92329.16381      175242.5793     -143080.3594      133040.5672     -71452.34846      53943.93702
+Cost Function (vardT2) value is  : 3015128.575
+Gradient (norm g_k) value is     : 1288436.7008
+ -------------------------------
+
+
+ ---- Test while loop for GDA: 2 itterations ---- 
+
+                        Itt :2
+
+Value for xTest of:         - TE = 19.407 (ms)
+Gradient values of  beta is      : -166300.2079
+Value for xTest of:         - FA = 2.7304      2.5943      2.6238      2.6448      2.6041      2.6421 (radeans)
+Gradient values of alpha l is    : 234796.2633     -146246.2008      119100.6647     -46625.77999      38364.57519      13678.99274
+Cost Function (vardT2) value is  : 3117579.1018
+Gradient (norm g_k) value is     : 349558.1251
+ -------------------------------
+
+
+ ---- Test while loop for GDA: 3 itterations ---- 
+
+                        Itt :3
+
+Value for xTest of:         - TE = 19.3238 (ms)
+Gradient values of  beta is      : 1399677.2749
+Value for xTest of:         - FA = 2.8478      2.5212      2.6834      2.6215      2.6233       2.649 (radeans)
+Gradient values of alpha l is    : -147771.5542       202915.402     -151581.8787      133721.8038     -64760.97254      52585.49477
+Cost Function (vardT2) value is  : 3134630.0526
+Gradient (norm g_k) value is     : 1438723.5214
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 4 itterations ---- 
+
+                        Itt :4
+
+Value for xTest of:         - TE = 19.3245 (ms)
+Gradient values of  beta is      : 1394812.8996
+Value for xTest of:         - FA = 2.8477      2.5213      2.6833      2.6216      2.6232       2.649 (radeans)
+Gradient values of alpha l is    : -147372.0658      202528.1804     -151266.0101      133502.7539     -64629.99614      52533.42899
+Cost Function (vardT2) value is  : 3134629.4788
+Gradient (norm g_k) value is     : 1433834.1617
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 5 itterations ---- 
+
+                        Itt :5
+
+Value for xTest of:         - TE = 19.3252 (ms)
+Gradient values of  beta is      : 1389965.4029
+Value for xTest of:         - FA = 2.8476      2.5214      2.6832      2.6217      2.6232       2.649 (radeans)
+Gradient values of alpha l is    : -146973.4388      202141.7816     -150950.8138      133284.1601     -64499.29251      52481.46461
+Cost Function (vardT2) value is  : 3134628.8453
+Gradient (norm g_k) value is     : 1428961.7179
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 6 itterations ---- 
+
+                        Itt :6
+
+Value for xTest of:         - TE = 19.3259 (ms)
+Gradient values of  beta is      : 1385134.7232
+Value for xTest of:         - FA = 2.8476      2.5215      2.6832      2.6217      2.6232       2.649 (radeans)
+Gradient values of alpha l is    : -146575.6715      201756.2038     -150636.2882      133066.0215     -64368.86107      52429.60143
+Cost Function (vardT2) value is  : 3134628.1527
+Gradient (norm g_k) value is     : 1424106.1285
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 7 itterations ---- 
+
+                        Itt :7
+
+Value for xTest of:         - TE = 19.3265 (ms)
+Gradient values of  beta is      : 1380320.7992
+Value for xTest of:         - FA = 2.8475      2.5216      2.6831      2.6218      2.6231      2.6491 (radeans)
+Gradient values of alpha l is    : -146178.7619      201371.4453     -150322.4319       132848.337      -64238.7012      52377.83925
+Cost Function (vardT2) value is  : 3134627.4014
+Gradient (norm g_k) value is     : 1419267.3325
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 8 itterations ---- 
+
+                        Itt :8
+
+Value for xTest of:         - TE = 19.3272 (ms)
+Gradient values of  beta is      : 1375523.5699
+Value for xTest of:         - FA = 2.8474      2.5217       2.683      2.6219      2.6231      2.6491 (radeans)
+Gradient values of alpha l is    : -145782.7083      200987.5044     -150009.2435      132631.1058     -64108.81232      52326.17786
+Cost Function (vardT2) value is  : 3134626.5921
+Gradient (norm g_k) value is     : 1414445.2688
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 9 itterations ---- 
+
+                        Itt :9
+
+Value for xTest of:         - TE = 19.3279 (ms)
+Gradient values of  beta is      : 1370742.9746
+Value for xTest of:         - FA = 2.8473      2.5218       2.683      2.6219      2.6231      2.6491 (radeans)
+Gradient values of alpha l is    : -145387.5089      200604.3792     -149696.7214      132414.3268     -63979.19381      52274.61707
+Cost Function (vardT2) value is  : 3134625.7253
+Gradient (norm g_k) value is     : 1409639.8768
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 10 itterations ---- 
+
+                        Itt :10
+
+Value for xTest of:         - TE = 19.3285 (ms)
+Gradient values of  beta is      : 1365978.9526
+Value for xTest of:         - FA = 2.8473      2.5219      2.6829       2.622       2.623      2.6491 (radeans)
+Gradient values of alpha l is    : -144993.1617      200222.0681     -149384.8641       132197.999      -63849.8451      52223.15667
+Cost Function (vardT2) value is  : 3134624.8016
+Gradient (norm g_k) value is     : 1404851.0959
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 11 itterations ---- 
+
+                        Itt :11
+
+Value for xTest of:         - TE = 19.3292 (ms)
+Gradient values of  beta is      : 1361231.4436
+Value for xTest of:         - FA = 2.8472       2.522      2.6828       2.622       2.623      2.6492 (radeans)
+Gradient values of alpha l is    : -144599.6651      199840.5692     -149073.6703      131982.1215     -63720.76557      52171.79645
+Cost Function (vardT2) value is  : 3134623.8214
+Gradient (norm g_k) value is     : 1400078.8661
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 12 itterations ---- 
+
+                        Itt :12
+
+Value for xTest of:         - TE = 19.3299 (ms)
+Gradient values of  beta is      : 1356500.3877
+Value for xTest of:         - FA = 2.8471      2.5221      2.6827      2.6221       2.623      2.6492 (radeans)
+Gradient values of alpha l is    : -144207.0171      199459.8808     -148763.1383      131766.6932     -63591.95464      52120.53623
+Cost Function (vardT2) value is  : 3134622.7854
+Gradient (norm g_k) value is     : 1395323.1272
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 13 itterations ---- 
+
+                        Itt :13
+
+Value for xTest of:         - TE = 19.3305 (ms)
+Gradient values of  beta is      : 1351785.7249
+Value for xTest of:         - FA = 2.8471      2.5222      2.6827      2.6222      2.6229      2.6492 (radeans)
+Gradient values of alpha l is    : -143815.216      199080.0013     -148453.2669      131551.7133     -63463.41172       52069.3758
+Cost Function (vardT2) value is  : 3134621.694
+Gradient (norm g_k) value is     : 1390583.8197
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 14 itterations ---- 
+
+                        Itt :14
+
+Value for xTest of:         - TE = 19.3312 (ms)
+Gradient values of  beta is      : 1347087.3957
+Value for xTest of:         - FA = 2.847      2.5223      2.6826      2.6222      2.6229      2.6492 (radeans)
+Gradient values of alpha l is    : -143424.2599      198700.9288     -148144.0545      131337.1808     -63335.13621      52018.31496
+Cost Function (vardT2) value is  : 3134620.5479
+Gradient (norm g_k) value is     : 1385860.8839
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 15 itterations ---- 
+
+                        Itt :15
+
+Value for xTest of:         - TE = 19.3319 (ms)
+Gradient values of  beta is      : 1342405.3407
+Value for xTest of:         - FA = 2.8469      2.5224      2.6825      2.6223      2.6229      2.6493 (radeans)
+Gradient values of alpha l is    : -143034.1471      198322.6616     -147835.4996      131123.0946     -63207.12752      51967.35352
+Cost Function (vardT2) value is  : 3134619.3474
+Gradient (norm g_k) value is     : 1381154.2606
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 16 itterations ---- 
+
+                        Itt :16
+
+Value for xTest of:         - TE = 19.3325 (ms)
+Gradient values of  beta is      : 1337739.5008
+Value for xTest of:         - FA = 2.8469      2.5225      2.6824      2.6224      2.6229      2.6493 (radeans)
+Gradient values of alpha l is    : -142644.8757       197945.198     -147527.6009      130909.4538     -63079.38507      51916.49126
+Cost Function (vardT2) value is  : 3134618.0932
+Gradient (norm g_k) value is     : 1376463.8909
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 17 itterations ---- 
+
+                        Itt :17
+
+Value for xTest of:         - TE = 19.3332 (ms)
+Gradient values of  beta is      : 1333089.8172
+Value for xTest of:         - FA = 2.8468      2.5226      2.6824      2.6224      2.6228      2.6493 (radeans)
+Gradient values of alpha l is    : -142256.4439      197568.5363     -147220.3568      130696.2575     -62951.90827        51865.728
+Cost Function (vardT2) value is  : 3134616.7857
+Gradient (norm g_k) value is     : 1371789.7159
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 18 itterations ---- 
+
+                        Itt :18
+
+Value for xTest of:         - TE = 19.3338 (ms)
+Gradient values of  beta is      : 1328456.2311
+Value for xTest of:         - FA = 2.8467      2.5227      2.6823      2.6225      2.6228      2.6493 (radeans)
+Gradient values of alpha l is    : -141868.85      197192.6748     -146913.7659      130483.5047     -62824.69654      51815.06354
+Cost Function (vardT2) value is  : 3134615.4255
+Gradient (norm g_k) value is     : 1367131.6771
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 19 itterations ---- 
+
+                        Itt :19
+
+Value for xTest of:         - TE = 19.3345 (ms)
+Gradient values of  beta is      : 1323838.6842
+Value for xTest of:         - FA = 2.8466      2.5228      2.6822      2.6226      2.6228      2.6494 (radeans)
+Gradient values of alpha l is    : -141482.0922      196817.6116     -146607.8268      130271.1944     -62697.74928      51764.49767
+Cost Function (vardT2) value is  : 3134614.0131
+Gradient (norm g_k) value is     : 1362489.7161
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 20 itterations ---- 
+
+                        Itt :20
+
+Value for xTest of:         - TE = 19.3351 (ms)
+Gradient values of  beta is      : 1319237.1184
+Value for xTest of:         - FA = 2.8466      2.5229      2.6822      2.6226      2.6227      2.6494 (radeans)
+Gradient values of alpha l is    : -141096.1686      196443.3453      -146302.538      130059.3256     -62571.06592      51714.03021
+Cost Function (vardT2) value is  : 3134612.549
+Gradient (norm g_k) value is     : 1357863.7749
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 21 itterations ---- 
+
+                        Itt :21
+
+Value for xTest of:         - TE = 19.3358 (ms)
+Gradient values of  beta is      : 1314651.4756
+Value for xTest of:         - FA = 2.8465       2.523      2.6821      2.6227      2.6227      2.6494 (radeans)
+Gradient values of alpha l is    : -140711.0775      196069.8739     -145997.8982      129847.8975     -62444.64587      51663.66095
+Cost Function (vardT2) value is  : 3134611.0337
+Gradient (norm g_k) value is     : 1353253.7956
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 22 itterations ---- 
+
+                        Itt :22
+
+Value for xTest of:         - TE = 19.3364 (ms)
+Gradient values of  beta is      : 1310081.6981
+Value for xTest of:         - FA = 2.8464      2.5231       2.682      2.6227      2.6227      2.6494 (radeans)
+Gradient values of alpha l is    : -140326.8172      195697.1958     -145693.9058      129636.9091     -62318.48855      51613.38969
+Cost Function (vardT2) value is  : 3134609.4677
+Gradient (norm g_k) value is     : 1348659.7206
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 23 itterations ---- 
+
+                        Itt :23
+
+Value for xTest of:         - TE = 19.337 (ms)
+Gradient values of  beta is      : 1305527.7284
+Value for xTest of:         - FA = 2.8464      2.5232      2.6819      2.6228      2.6226      2.6495 (radeans)
+Gradient values of alpha l is    : -139943.3857      195325.3093     -145390.5594      129426.3593     -62192.59339      51563.21625
+Cost Function (vardT2) value is  : 3134607.8515
+Gradient (norm g_k) value is     : 1344081.4925
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 24 itterations ---- 
+
+                        Itt :24
+
+Value for xTest of:         - TE = 19.3377 (ms)
+Gradient values of  beta is      : 1300989.5094
+Value for xTest of:         - FA = 2.8463      2.5233      2.6819      2.6229      2.6226      2.6495 (radeans)
+Gradient values of alpha l is    : -139560.7814      194954.2127     -145087.8577      129216.2473      -62066.9598      51513.14042
+Cost Function (vardT2) value is  : 3134606.1856
+Gradient (norm g_k) value is     : 1339519.0542
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 25 itterations ---- 
+
+                        Itt :25
+
+Value for xTest of:         - TE = 19.3383 (ms)
+Gradient values of  beta is      : 1296466.9839
+Value for xTest of:         - FA = 2.8462      2.5233      2.6818      2.6229      2.6226      2.6495 (radeans)
+Gradient values of alpha l is    : -139179.0025      194583.9043     -144785.7992      129006.5722     -61941.58721      51463.16201
+Cost Function (vardT2) value is  : 3134604.4706
+Gradient (norm g_k) value is     : 1334972.3486
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 26 itterations ---- 
+
+                        Itt :26
+
+Value for xTest of:         - TE = 19.3389 (ms)
+Gradient values of  beta is      : 1291960.0952
+Value for xTest of:         - FA = 2.8462      2.5234      2.6817       2.623      2.6226      2.6495 (radeans)
+Gradient values of alpha l is    : -138798.0472      194214.3825     -144484.3824      128797.3329     -61816.47505      51413.28082
+Cost Function (vardT2) value is  : 3134602.7068
+Gradient (norm g_k) value is     : 1330441.3191
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
+ itteration: 11
+
+ ---- Test while loop for GDA: 27 itterations ---- 
+
+                        Itt :27
+
+Value for xTest of:         - TE = 19.3396 (ms)
+Gradient values of  beta is      : 1287468.7866
+Value for xTest of:         - FA = 2.8461      2.5235      2.6817      2.6231      2.6225      2.6496 (radeans)
+Gradient values of alpha l is    : -138417.9138      193845.6455      -144183.606      128588.5285     -61691.62274      51363.49666
+Cost Function (vardT2) value is  : 3134600.8949
+Gradient (norm g_k) value is     : 1325925.9091
+ -------------------------------
+
+ itteration: 1
+ itteration: 2
+ itteration: 3
+ itteration: 4
+ itteration: 5
+ itteration: 6
+ itteration: 7
+ itteration: 8
+ itteration: 9
+ itteration: 10
