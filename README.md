@@ -1,12 +1,14 @@
 T2_KneeAtive - (T2 Knee Accessible Quantitative) 
 
 
+
 INTRODUCTION
 
 Toolbox for Quantitaive Knee Imaging - T2 mapping - based on Multi (Turbo) Spin-Echo Sequence.
 
 
-T2 is a promising MRI biomarker, with applications including detection of early cartilage degeneration [1]. Fitting a mono-exponential model to multi spin-echo (MSE) measurements is typical for clinical T2-mapping. However, as the signal deviates from this model due to echoes caused by unwanted pathways, dictionary-based estimation approaches were proposed [2]. A dictionary of echo modulation curves (EMC) is predicted using the Extended Phase Graphs (EPG) formalism, considering all acquisition parameters and a range of expected tissue parameters (T1 and T2); mapping consists of finding the best match to the measured signal. We proposed an MSE pulse sequence optimization for dictionary-based cartilage T2-mapping, following up on promising results in the knee and hip cartilages. 
+T2 is a promising MRI biomarker, with applications including detection of early cartilage degeneration. Fitting a mono-exponential model to multi spin-echo (MSE) measurements is typical for clinical T2-mapping. However, as the signal deviates from this model due to echoes caused by unwanted pathways, dictionary-based estimation approaches were proposed. A dictionary of echo modulation curves (EMC) is predicted using the Extended Phase Graphs (EPG) formalism, considering all acquisition parameters and a range of expected tissue parameters (T1 and T2); mapping consists of finding the best match to the measured signal. We proposed an MSE pulse sequence optimization for dictionary-based cartilage T2-mapping, following up on promising results in the knee and hip cartilages. 
+
 
 
 GOAL
@@ -20,10 +22,11 @@ Code that helps determine the best combination of refocusing flip angle (FA), in
 Helps reconstruct the T2 maps from Knee images - from '.dat' file from the Siemens/GE scanners.
 
 
-The present implementation aims to contribute towards the development of open-source tools for MRI in order to make MRI more accessible, particularly on quantitative T2 maps
-. 
+The present implementation aims to contribute towards the development of open-source tools for MRI in order to make MRI more accessible, particularly on quantitative T2 maps.
 
-Disclaimer: 
+
+
+DISCLAIMER 
 
 We use the following toolboxes:
 
