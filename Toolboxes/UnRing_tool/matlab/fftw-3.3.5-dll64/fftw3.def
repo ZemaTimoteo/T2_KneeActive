@@ -1,0 +1,381 @@
+LIBRARY     FFTW3.DLL
+
+EXPORTS
+    fftw_assertion_failed          @160 ; fftw_assertion_failed
+    fftw_cc                        @102 ; fftw_cc
+    fftw_cleanup                   @105 ; fftw_cleanup
+    fftw_codelet_optim             @103 ; fftw_codelet_optim
+    fftw_destroy_plan              @104 ; fftw_destroy_plan
+    fftw_execute                   @106 ; fftw_execute
+    fftw_execute_dft               @107 ; fftw_execute_dft
+    fftw_execute_dft_c2r           @163 ; fftw_execute_dft_c2r
+    fftw_execute_dft_r2c           @108 ; fftw_execute_dft_r2c
+    fftw_execute_r2r               @109 ; fftw_execute_r2r
+    fftw_execute_split_dft         @110 ; fftw_execute_split_dft
+    fftw_execute_split_dft_c2r     @111 ; fftw_execute_split_dft_c2r
+    fftw_execute_split_dft_r2c     @112 ; fftw_execute_split_dft_r2c
+    fftw_export_wisdom             @113 ; fftw_export_wisdom
+    fftw_export_wisdom_to_file     @114 ; fftw_export_wisdom_to_file
+    fftw_export_wisdom_to_string   @115 ; fftw_export_wisdom_to_string
+    fftw_flops                     @116 ; fftw_flops
+    fftw_forget_wisdom             @117 ; fftw_forget_wisdom
+    fftw_fprint_plan               @118 ; fftw_fprint_plan
+    fftw_free                      @119 ; fftw_free
+    fftw_ifree                     @154 ; fftw_ifree
+    fftw_import_system_wisdom      @120 ; fftw_import_system_wisdom
+    fftw_import_wisdom             @121 ; fftw_import_wisdom
+    fftw_import_wisdom_from_file   @122 ; fftw_import_wisdom_from_file
+    fftw_import_wisdom_from_string @123 ; fftw_import_wisdom_from_string
+    fftw_malloc                    @124 ; fftw_malloc
+    fftw_malloc_plain              @156 ; fftw_malloc_plain
+    fftw_mkprinter_file            @158 ; fftw_mkprinter_file
+    fftw_plan_awake                @155 ; fftw_plan_awake
+    fftw_plan_dft                  @125 ; fftw_plan_dft
+    fftw_plan_dft_1d               @126 ; fftw_plan_dft_1d
+    fftw_plan_dft_2d               @127 ; fftw_plan_dft_2d
+    fftw_plan_dft_3d               @128 ; fftw_plan_dft_3d
+    fftw_plan_dft_c2r              @129 ; fftw_plan_dft_c2r
+    fftw_plan_dft_c2r_1d           @130 ; fftw_plan_dft_c2r_1d
+    fftw_plan_dft_c2r_2d           @131 ; fftw_plan_dft_c2r_2d
+    fftw_plan_dft_c2r_3d           @132 ; fftw_plan_dft_c2r_3d
+    fftw_plan_dft_r2c              @133 ; fftw_plan_dft_r2c
+    fftw_plan_dft_r2c_1d           @134 ; fftw_plan_dft_r2c_1d
+    fftw_plan_dft_r2c_2d           @135 ; fftw_plan_dft_r2c_2d
+    fftw_plan_dft_r2c_3d           @136 ; fftw_plan_dft_r2c_3d
+    fftw_plan_guru_dft             @137 ; fftw_plan_guru_dft
+    fftw_plan_guru_dft_c2r         @138 ; fftw_plan_guru_dft_c2r
+    fftw_plan_guru_dft_r2c         @139 ; fftw_plan_guru_dft_r2c
+    fftw_plan_guru_r2r             @140 ; fftw_plan_guru_r2r
+    fftw_plan_guru_split_dft       @141 ; fftw_plan_guru_split_dft
+    fftw_plan_guru_split_dft_c2r   @142 ; fftw_plan_guru_split_dft_c2r
+    fftw_plan_guru_split_dft_r2c   @143 ; fftw_plan_guru_split_dft_r2c
+    fftw_plan_many_dft             @144 ; fftw_plan_many_dft
+    fftw_plan_many_dft_c2r         @145 ; fftw_plan_many_dft_c2r
+    fftw_plan_many_dft_r2c         @146 ; fftw_plan_many_dft_r2c
+    fftw_plan_many_r2r             @147 ; fftw_plan_many_r2r
+    fftw_plan_r2r                  @148 ; fftw_plan_r2r
+    fftw_plan_r2r_1d               @149 ; fftw_plan_r2r_1d
+    fftw_plan_r2r_2d               @150 ; fftw_plan_r2r_2d
+    fftw_plan_r2r_3d               @151 ; fftw_plan_r2r_3d
+    fftw_print_plan                @152 ; fftw_print_plan
+    fftw_printer_destroy           @157 ; fftw_printer_destroy
+    fftw_problem_dft_p             @162 ; fftw_problem_dft_p
+    fftw_problem_rdft2_p           @159 ; fftw_problem_rdft2_p
+    fftw_problem_rdft_p            @161 ; fftw_problem_rdft_p
+    fftw_the_planner               @153 ; fftw_the_planner
+    fftw_version                   @101 ; fftw_version
+    fftwf_assertion_failed         @60  ; fftwf_assertion_failed
+    fftwf_cc                       @2   ; fftwf_cc
+    fftwf_cleanup                  @5   ; fftwf_cleanup
+    fftwf_codelet_optim            @3   ; fftwf_codelet_optim
+    fftwf_destroy_plan             @4   ; fftwf_destroy_plan
+    fftwf_execute                  @6   ; fftwf_execute
+    fftwf_execute_dft              @7   ; fftwf_execute_dft
+    fftwf_execute_dft_c2r          @63  ; fftwf_execute_dft_c2r
+    fftwf_execute_dft_r2c          @8   ; fftwf_execute_dft_r2c
+    fftwf_execute_r2r              @9   ; fftwf_execute_r2r
+    fftwf_execute_split_dft        @10  ; fftwf_execute_split_dft
+    fftwf_execute_split_dft_c2r    @11  ; fftwf_execute_split_dft_c2r
+    fftwf_execute_split_dft_r2c    @12  ; fftwf_execute_split_dft_r2c
+    fftwf_export_wisdom            @13  ; fftwf_export_wisdom
+    fftwf_export_wisdom_to_file    @14  ; fftwf_export_wisdom_to_file
+    fftwf_export_wisdom_to_string  @15  ; fftwf_export_wisdom_to_string
+    fftwf_flops                    @16  ; fftwf_flops
+    fftwf_forget_wisdom            @17  ; fftwf_forget_wisdom
+    fftwf_fprint_plan              @18  ; fftwf_fprint_plan
+    fftwf_free                     @19  ; fftwf_free
+    fftwf_ifree                    @54  ; fftwf_ifree
+    fftwf_import_system_wisdom     @20  ; fftwf_import_system_wisdom
+    fftwf_import_wisdom            @21  ; fftwf_import_wisdom
+    fftwf_import_wisdom_from_file  @22  ; fftwf_import_wisdom_from_file
+    fftwf_import_wisdom_from_string @23  ; fftwf_import_wisdom_from_string
+    fftwf_malloc                   @24  ; fftwf_malloc
+    fftwf_malloc_plain             @56  ; fftwf_malloc_plain
+    fftwf_mkprinter_file           @58  ; fftwf_mkprinter_file
+    fftwf_plan_awake               @55  ; fftwf_plan_awake
+    fftwf_plan_dft                 @25  ; fftwf_plan_dft
+    fftwf_plan_dft_1d              @26  ; fftwf_plan_dft_1d
+    fftwf_plan_dft_2d              @27  ; fftwf_plan_dft_2d
+    fftwf_plan_dft_3d              @28  ; fftwf_plan_dft_3d
+    fftwf_plan_dft_c2r             @29  ; fftwf_plan_dft_c2r
+    fftwf_plan_dft_c2r_1d          @30  ; fftwf_plan_dft_c2r_1d
+    fftwf_plan_dft_c2r_2d          @31  ; fftwf_plan_dft_c2r_2d
+    fftwf_plan_dft_c2r_3d          @32  ; fftwf_plan_dft_c2r_3d
+    fftwf_plan_dft_r2c             @33  ; fftwf_plan_dft_r2c
+    fftwf_plan_dft_r2c_1d          @34  ; fftwf_plan_dft_r2c_1d
+    fftwf_plan_dft_r2c_2d          @35  ; fftwf_plan_dft_r2c_2d
+    fftwf_plan_dft_r2c_3d          @36  ; fftwf_plan_dft_r2c_3d
+    fftwf_plan_guru_dft            @37  ; fftwf_plan_guru_dft
+    fftwf_plan_guru_dft_c2r        @38  ; fftwf_plan_guru_dft_c2r
+    fftwf_plan_guru_dft_r2c        @39  ; fftwf_plan_guru_dft_r2c
+    fftwf_plan_guru_r2r            @40  ; fftwf_plan_guru_r2r
+    fftwf_plan_guru_split_dft      @41  ; fftwf_plan_guru_split_dft
+    fftwf_plan_guru_split_dft_c2r  @42  ; fftwf_plan_guru_split_dft_c2r
+    fftwf_plan_guru_split_dft_r2c  @43  ; fftwf_plan_guru_split_dft_r2c
+    fftwf_plan_many_dft            @44  ; fftwf_plan_many_dft
+    fftwf_plan_many_dft_c2r        @45  ; fftwf_plan_many_dft_c2r
+    fftwf_plan_many_dft_r2c        @46  ; fftwf_plan_many_dft_r2c
+    fftwf_plan_many_r2r            @47  ; fftwf_plan_many_r2r
+    fftwf_plan_r2r                 @48  ; fftwf_plan_r2r
+    fftwf_plan_r2r_1d              @49  ; fftwf_plan_r2r_1d
+    fftwf_plan_r2r_2d              @50  ; fftwf_plan_r2r_2d
+    fftwf_plan_r2r_3d              @51  ; fftwf_plan_r2r_3d
+    fftwf_print_plan               @52  ; fftwf_print_plan
+    fftwf_printer_destroy          @57  ; fftwf_printer_destroy
+    fftwf_problem_dft_p            @62  ; fftwf_problem_dft_p
+    fftwf_problem_rdft2_p          @59  ; fftwf_problem_rdft2_p
+    fftwf_problem_rdft_p           @61  ; fftwf_problem_rdft_p
+    fftwf_the_planner              @53  ; fftwf_the_planner
+    fftwf_version                  @1   ; fftwf_version
+    fftwl_assertion_failed         @260 ; fftwl_assertion_failed
+    fftwl_cc                       @202 ; fftwl_cc
+    fftwl_cleanup                  @205 ; fftwl_cleanup
+    fftwl_codelet_optim            @203 ; fftwl_codelet_optim
+    fftwl_destroy_plan             @204 ; fftwl_destroy_plan
+    fftwl_execute                  @206 ; fftwl_execute
+    fftwl_execute_dft              @207 ; fftwl_execute_dft
+    fftwl_execute_dft_c2r          @263 ; fftwl_execute_dft_c2r
+    fftwl_execute_dft_r2c          @208 ; fftwl_execute_dft_r2c
+    fftwl_execute_r2r              @209 ; fftwl_execute_r2r
+    fftwl_execute_split_dft        @210 ; fftwl_execute_split_dft
+    fftwl_execute_split_dft_c2r    @211 ; fftwl_execute_split_dft_c2r
+    fftwl_execute_split_dft_r2c    @212 ; fftwl_execute_split_dft_r2c
+    fftwl_export_wisdom            @213 ; fftwl_export_wisdom
+    fftwl_export_wisdom_to_file    @214 ; fftwl_export_wisdom_to_file
+    fftwl_export_wisdom_to_string  @215 ; fftwl_export_wisdom_to_string
+    fftwl_flops                    @216 ; fftwl_flops
+    fftwl_forget_wisdom            @217 ; fftwl_forget_wisdom
+    fftwl_fprint_plan              @218 ; fftwl_fprint_plan
+    fftwl_free                     @219 ; fftwl_free
+    fftwl_ifree                    @254 ; fftwl_ifree
+    fftwl_import_system_wisdom     @220 ; fftwl_import_system_wisdom
+    fftwl_import_wisdom            @221 ; fftwl_import_wisdom
+    fftwl_import_wisdom_from_file  @222 ; fftwl_import_wisdom_from_file
+    fftwl_import_wisdom_from_string @223 ; fftwl_import_wisdom_from_string
+    fftwl_malloc                   @224 ; fftwl_malloc
+    fftwl_malloc_plain             @256 ; fftwl_malloc_plain
+    fftwl_mkprinter_file           @258 ; fftwl_mkprinter_file
+    fftwl_plan_awake               @255 ; fftwl_plan_awake
+    fftwl_plan_dft                 @225 ; fftwl_plan_dft
+    fftwl_plan_dft_1d              @226 ; fftwl_plan_dft_1d
+    fftwl_plan_dft_2d              @227 ; fftwl_plan_dft_2d
+    fftwl_plan_dft_3d              @228 ; fftwl_plan_dft_3d
+    fftwl_plan_dft_c2r             @229 ; fftwl_plan_dft_c2r
+    fftwl_plan_dft_c2r_1d          @230 ; fftwl_plan_dft_c2r_1d
+    fftwl_plan_dft_c2r_2d          @231 ; fftwl_plan_dft_c2r_2d
+    fftwl_plan_dft_c2r_3d          @232 ; fftwl_plan_dft_c2r_3d
+    fftwl_plan_dft_r2c             @233 ; fftwl_plan_dft_r2c
+    fftwl_plan_dft_r2c_1d          @234 ; fftwl_plan_dft_r2c_1d
+    fftwl_plan_dft_r2c_2d          @235 ; fftwl_plan_dft_r2c_2d
+    fftwl_plan_dft_r2c_3d          @236 ; fftwl_plan_dft_r2c_3d
+    fftwl_plan_guru_dft            @237 ; fftwl_plan_guru_dft
+    fftwl_plan_guru_dft_c2r        @238 ; fftwl_plan_guru_dft_c2r
+    fftwl_plan_guru_dft_r2c        @239 ; fftwl_plan_guru_dft_r2c
+    fftwl_plan_guru_r2r            @240 ; fftwl_plan_guru_r2r
+    fftwl_plan_guru_split_dft      @241 ; fftwl_plan_guru_split_dft
+    fftwl_plan_guru_split_dft_c2r  @242 ; fftwl_plan_guru_split_dft_c2r
+    fftwl_plan_guru_split_dft_r2c  @243 ; fftwl_plan_guru_split_dft_r2c
+    fftwl_plan_many_dft            @244 ; fftwl_plan_many_dft
+    fftwl_plan_many_dft_c2r        @245 ; fftwl_plan_many_dft_c2r
+    fftwl_plan_many_dft_r2c        @246 ; fftwl_plan_many_dft_r2c
+    fftwl_plan_many_r2r            @247 ; fftwl_plan_many_r2r
+    fftwl_plan_r2r                 @248 ; fftwl_plan_r2r
+    fftwl_plan_r2r_1d              @249 ; fftwl_plan_r2r_1d
+    fftwl_plan_r2r_2d              @250 ; fftwl_plan_r2r_2d
+    fftwl_plan_r2r_3d              @251 ; fftwl_plan_r2r_3d
+    fftwl_print_plan               @252 ; fftwl_print_plan
+    fftwl_printer_destroy          @257 ; fftwl_printer_destroy
+    fftwl_problem_dft_p            @262 ; fftwl_problem_dft_p
+    fftwl_problem_rdft2_p          @259 ; fftwl_problem_rdft2_p
+    fftwl_problem_rdft_p           @261 ; fftwl_problem_rdft_p
+    fftwl_the_planner              @253 ; fftwl_the_planner
+    fftwl_version                  @201 ; fftwl_version
+    _fftw_assertion_failed          = fftw_assertion_failed
+    _fftw_cc                        = fftw_cc
+    _fftw_cleanup                   = fftw_cleanup
+    _fftw_codelet_optim             = fftw_codelet_optim
+    _fftw_destroy_plan              = fftw_destroy_plan
+    _fftw_execute                   = fftw_execute
+    _fftw_execute_dft               = fftw_execute_dft
+    _fftw_execute_dft_c2r           = fftw_execute_dft_c2r
+    _fftw_execute_dft_r2c           = fftw_execute_dft_r2c
+    _fftw_execute_r2r               = fftw_execute_r2r
+    _fftw_execute_split_dft         = fftw_execute_split_dft
+    _fftw_execute_split_dft_c2r     = fftw_execute_split_dft_c2r
+    _fftw_execute_split_dft_r2c     = fftw_execute_split_dft_r2c
+    _fftw_export_wisdom             = fftw_export_wisdom
+    _fftw_export_wisdom_to_file     = fftw_export_wisdom_to_file
+    _fftw_export_wisdom_to_string   = fftw_export_wisdom_to_string
+    _fftw_flops                     = fftw_flops
+    _fftw_forget_wisdom             = fftw_forget_wisdom
+    _fftw_fprint_plan               = fftw_fprint_plan
+    _fftw_free                      = fftw_free
+    _fftw_ifree                     = fftw_ifree
+    _fftw_import_system_wisdom      = fftw_import_system_wisdom
+    _fftw_import_wisdom             = fftw_import_wisdom
+    _fftw_import_wisdom_from_file   = fftw_import_wisdom_from_file
+    _fftw_import_wisdom_from_string = fftw_import_wisdom_from_string
+    _fftw_malloc                    = fftw_malloc
+    _fftw_malloc_plain              = fftw_malloc_plain
+    _fftw_mkprinter_file            = fftw_mkprinter_file
+    _fftw_plan_awake                = fftw_plan_awake
+    _fftw_plan_dft                  = fftw_plan_dft
+    _fftw_plan_dft_1d               = fftw_plan_dft_1d
+    _fftw_plan_dft_2d               = fftw_plan_dft_2d
+    _fftw_plan_dft_3d               = fftw_plan_dft_3d
+    _fftw_plan_dft_c2r              = fftw_plan_dft_c2r
+    _fftw_plan_dft_c2r_1d           = fftw_plan_dft_c2r_1d
+    _fftw_plan_dft_c2r_2d           = fftw_plan_dft_c2r_2d
+    _fftw_plan_dft_c2r_3d           = fftw_plan_dft_c2r_3d
+    _fftw_plan_dft_r2c              = fftw_plan_dft_r2c
+    _fftw_plan_dft_r2c_1d           = fftw_plan_dft_r2c_1d
+    _fftw_plan_dft_r2c_2d           = fftw_plan_dft_r2c_2d
+    _fftw_plan_dft_r2c_3d           = fftw_plan_dft_r2c_3d
+    _fftw_plan_guru_dft             = fftw_plan_guru_dft
+    _fftw_plan_guru_dft_c2r         = fftw_plan_guru_dft_c2r
+    _fftw_plan_guru_dft_r2c         = fftw_plan_guru_dft_r2c
+    _fftw_plan_guru_r2r             = fftw_plan_guru_r2r
+    _fftw_plan_guru_split_dft       = fftw_plan_guru_split_dft
+    _fftw_plan_guru_split_dft_c2r   = fftw_plan_guru_split_dft_c2r
+    _fftw_plan_guru_split_dft_r2c   = fftw_plan_guru_split_dft_r2c
+    _fftw_plan_many_dft             = fftw_plan_many_dft
+    _fftw_plan_many_dft_c2r         = fftw_plan_many_dft_c2r
+    _fftw_plan_many_dft_r2c         = fftw_plan_many_dft_r2c
+    _fftw_plan_many_r2r             = fftw_plan_many_r2r
+    _fftw_plan_r2r                  = fftw_plan_r2r
+    _fftw_plan_r2r_1d               = fftw_plan_r2r_1d
+    _fftw_plan_r2r_2d               = fftw_plan_r2r_2d
+    _fftw_plan_r2r_3d               = fftw_plan_r2r_3d
+    _fftw_print_plan                = fftw_print_plan
+    _fftw_printer_destroy           = fftw_printer_destroy
+    _fftw_problem_dft_p             = fftw_problem_dft_p
+    _fftw_problem_rdft2_p           = fftw_problem_rdft2_p
+    _fftw_problem_rdft_p            = fftw_problem_rdft_p
+    _fftw_the_planner               = fftw_the_planner
+    _fftw_version                   = fftw_version
+    _fftwf_assertion_failed         = fftwf_assertion_failed
+    _fftwf_cc                       = fftwf_cc
+    _fftwf_cleanup                  = fftwf_cleanup
+    _fftwf_codelet_optim            = fftwf_codelet_optim
+    _fftwf_destroy_plan             = fftwf_destroy_plan
+    _fftwf_execute                  = fftwf_execute
+    _fftwf_execute_dft              = fftwf_execute_dft
+    _fftwf_execute_dft_c2r          = fftwf_execute_dft_c2r
+    _fftwf_execute_dft_r2c          = fftwf_execute_dft_r2c
+    _fftwf_execute_r2r              = fftwf_execute_r2r
+    _fftwf_execute_split_dft        = fftwf_execute_split_dft
+    _fftwf_execute_split_dft_c2r    = fftwf_execute_split_dft_c2r
+    _fftwf_execute_split_dft_r2c    = fftwf_execute_split_dft_r2c
+    _fftwf_export_wisdom            = fftwf_export_wisdom
+    _fftwf_export_wisdom_to_file    = fftwf_export_wisdom_to_file
+    _fftwf_export_wisdom_to_string  = fftwf_export_wisdom_to_string
+    _fftwf_flops                    = fftwf_flops
+    _fftwf_forget_wisdom            = fftwf_forget_wisdom
+    _fftwf_fprint_plan              = fftwf_fprint_plan
+    _fftwf_free                     = fftwf_free
+    _fftwf_ifree                    = fftwf_ifree
+    _fftwf_import_system_wisdom     = fftwf_import_system_wisdom
+    _fftwf_import_wisdom            = fftwf_import_wisdom
+    _fftwf_import_wisdom_from_file  = fftwf_import_wisdom_from_file
+    _fftwf_import_wisdom_from_string = fftwf_import_wisdom_from_string
+    _fftwf_malloc                   = fftwf_malloc
+    _fftwf_malloc_plain             = fftwf_malloc_plain
+    _fftwf_mkprinter_file           = fftwf_mkprinter_file
+    _fftwf_plan_awake               = fftwf_plan_awake
+    _fftwf_plan_dft                 = fftwf_plan_dft
+    _fftwf_plan_dft_1d              = fftwf_plan_dft_1d
+    _fftwf_plan_dft_2d              = fftwf_plan_dft_2d
+    _fftwf_plan_dft_3d              = fftwf_plan_dft_3d
+    _fftwf_plan_dft_c2r             = fftwf_plan_dft_c2r
+    _fftwf_plan_dft_c2r_1d          = fftwf_plan_dft_c2r_1d
+    _fftwf_plan_dft_c2r_2d          = fftwf_plan_dft_c2r_2d
+    _fftwf_plan_dft_c2r_3d          = fftwf_plan_dft_c2r_3d
+    _fftwf_plan_dft_r2c             = fftwf_plan_dft_r2c
+    _fftwf_plan_dft_r2c_1d          = fftwf_plan_dft_r2c_1d
+    _fftwf_plan_dft_r2c_2d          = fftwf_plan_dft_r2c_2d
+    _fftwf_plan_dft_r2c_3d          = fftwf_plan_dft_r2c_3d
+    _fftwf_plan_guru_dft            = fftwf_plan_guru_dft
+    _fftwf_plan_guru_dft_c2r        = fftwf_plan_guru_dft_c2r
+    _fftwf_plan_guru_dft_r2c        = fftwf_plan_guru_dft_r2c
+    _fftwf_plan_guru_r2r            = fftwf_plan_guru_r2r
+    _fftwf_plan_guru_split_dft      = fftwf_plan_guru_split_dft
+    _fftwf_plan_guru_split_dft_c2r  = fftwf_plan_guru_split_dft_c2r
+    _fftwf_plan_guru_split_dft_r2c  = fftwf_plan_guru_split_dft_r2c
+    _fftwf_plan_many_dft            = fftwf_plan_many_dft
+    _fftwf_plan_many_dft_c2r        = fftwf_plan_many_dft_c2r
+    _fftwf_plan_many_dft_r2c        = fftwf_plan_many_dft_r2c
+    _fftwf_plan_many_r2r            = fftwf_plan_many_r2r
+    _fftwf_plan_r2r                 = fftwf_plan_r2r
+    _fftwf_plan_r2r_1d              = fftwf_plan_r2r_1d
+    _fftwf_plan_r2r_2d              = fftwf_plan_r2r_2d
+    _fftwf_plan_r2r_3d              = fftwf_plan_r2r_3d
+    _fftwf_print_plan               = fftwf_print_plan
+    _fftwf_printer_destroy          = fftwf_printer_destroy
+    _fftwf_problem_dft_p            = fftwf_problem_dft_p
+    _fftwf_problem_rdft2_p          = fftwf_problem_rdft2_p
+    _fftwf_problem_rdft_p           = fftwf_problem_rdft_p
+    _fftwf_the_planner              = fftwf_the_planner
+    _fftwf_version                  = fftwf_version
+    _fftwl_assertion_failed         = fftwl_assertion_failed
+    _fftwl_cc                       = fftwl_cc
+    _fftwl_cleanup                  = fftwl_cleanup
+    _fftwl_codelet_optim            = fftwl_codelet_optim
+    _fftwl_destroy_plan             = fftwl_destroy_plan
+    _fftwl_execute                  = fftwl_execute
+    _fftwl_execute_dft              = fftwl_execute_dft
+    _fftwl_execute_dft_c2r          = fftwl_execute_dft_c2r
+    _fftwl_execute_dft_r2c          = fftwl_execute_dft_r2c
+    _fftwl_execute_r2r              = fftwl_execute_r2r
+    _fftwl_execute_split_dft        = fftwl_execute_split_dft
+    _fftwl_execute_split_dft_c2r    = fftwl_execute_split_dft_c2r
+    _fftwl_execute_split_dft_r2c    = fftwl_execute_split_dft_r2c
+    _fftwl_export_wisdom            = fftwl_export_wisdom
+    _fftwl_export_wisdom_to_file    = fftwl_export_wisdom_to_file
+    _fftwl_export_wisdom_to_string  = fftwl_export_wisdom_to_string
+    _fftwl_flops                    = fftwl_flops
+    _fftwl_forget_wisdom            = fftwl_forget_wisdom
+    _fftwl_fprint_plan              = fftwl_fprint_plan
+    _fftwl_free                     = fftwl_free
+    _fftwl_ifree                    = fftwl_ifree
+    _fftwl_import_system_wisdom     = fftwl_import_system_wisdom
+    _fftwl_import_wisdom            = fftwl_import_wisdom
+    _fftwl_import_wisdom_from_file  = fftwl_import_wisdom_from_file
+    _fftwl_import_wisdom_from_string = fftwl_import_wisdom_from_string
+    _fftwl_malloc                   = fftwl_malloc
+    _fftwl_malloc_plain             = fftwl_malloc_plain
+    _fftwl_mkprinter_file           = fftwl_mkprinter_file
+    _fftwl_plan_awake               = fftwl_plan_awake
+    _fftwl_plan_dft                 = fftwl_plan_dft
+    _fftwl_plan_dft_1d              = fftwl_plan_dft_1d
+    _fftwl_plan_dft_2d              = fftwl_plan_dft_2d
+    _fftwl_plan_dft_3d              = fftwl_plan_dft_3d
+    _fftwl_plan_dft_c2r             = fftwl_plan_dft_c2r
+    _fftwl_plan_dft_c2r_1d          = fftwl_plan_dft_c2r_1d
+    _fftwl_plan_dft_c2r_2d          = fftwl_plan_dft_c2r_2d
+    _fftwl_plan_dft_c2r_3d          = fftwl_plan_dft_c2r_3d
+    _fftwl_plan_dft_r2c             = fftwl_plan_dft_r2c
+    _fftwl_plan_dft_r2c_1d          = fftwl_plan_dft_r2c_1d
+    _fftwl_plan_dft_r2c_2d          = fftwl_plan_dft_r2c_2d
+    _fftwl_plan_dft_r2c_3d          = fftwl_plan_dft_r2c_3d
+    _fftwl_plan_guru_dft            = fftwl_plan_guru_dft
+    _fftwl_plan_guru_dft_c2r        = fftwl_plan_guru_dft_c2r
+    _fftwl_plan_guru_dft_r2c        = fftwl_plan_guru_dft_r2c
+    _fftwl_plan_guru_r2r            = fftwl_plan_guru_r2r
+    _fftwl_plan_guru_split_dft      = fftwl_plan_guru_split_dft
+    _fftwl_plan_guru_split_dft_c2r  = fftwl_plan_guru_split_dft_c2r
+    _fftwl_plan_guru_split_dft_r2c  = fftwl_plan_guru_split_dft_r2c
+    _fftwl_plan_many_dft            = fftwl_plan_many_dft
+    _fftwl_plan_many_dft_c2r        = fftwl_plan_many_dft_c2r
+    _fftwl_plan_many_dft_r2c        = fftwl_plan_many_dft_r2c
+    _fftwl_plan_many_r2r            = fftwl_plan_many_r2r
+    _fftwl_plan_r2r                 = fftwl_plan_r2r
+    _fftwl_plan_r2r_1d              = fftwl_plan_r2r_1d
+    _fftwl_plan_r2r_2d              = fftwl_plan_r2r_2d
+    _fftwl_plan_r2r_3d              = fftwl_plan_r2r_3d
+    _fftwl_print_plan               = fftwl_print_plan
+    _fftwl_printer_destroy          = fftwl_printer_destroy
+    _fftwl_problem_dft_p            = fftwl_problem_dft_p
+    _fftwl_problem_rdft2_p          = fftwl_problem_rdft2_p
+    _fftwl_problem_rdft_p           = fftwl_problem_rdft_p
+    _fftwl_the_planner              = fftwl_the_planner
+    _fftwl_version                  = fftwl_version
