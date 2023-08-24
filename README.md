@@ -34,18 +34,13 @@ We use the following toolboxes (available in this github):
 
     UnRing_tool
 
-    Pypulseq -     https://github.com/imr-framework/pypulseq
+    Pypulseq & Pulseq-master - https://github.com/imr-framework/pypulseq
    
     mri-sim-py
     
-    py2jemris-master
-    
-    ...
+    py2jemris-master    
 
-    https://github.com/mriphysics/verse-mb
-
-    https://github.com/imr-framework/pypulseq
-
+   
     openjournals/joss-reviews#2478
 
 
