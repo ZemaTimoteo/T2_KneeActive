@@ -34,6 +34,12 @@ We use the following toolboxes (available in this github):
 
     UnRing_tool
 
+    Pypulseq -     https://github.com/imr-framework/pypulseq
+   
+    mri-sim-py
+    
+    py2jemris-master
+    
     ...
 
     https://github.com/mriphysics/verse-mb
@@ -48,7 +54,9 @@ We use the following toolboxes (available in this github):
     BART - https://mrirecon.github.io/bart/
     Gridding - https://github.com/ndwork/griddingCodes
 
-** To run the Python codes create a Toolbox folder with the following toolboxes:
+** To run the Python codes install the following toolboxes:
 
-    code from pypulseq - https://github.com/imr-framework/pypulseq
-    code from pulseqDiffusion - https://github.com/ritagnunes/PulseqDiffusion
+     pip install roipoly
+     pip install sigpy
+     Add toolbox from https://github.com/ut - mri-sim-py in a toolbox folder
+     code from pypulseq - https://github.com/imr-framework/pypulseq
