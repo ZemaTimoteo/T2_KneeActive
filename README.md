@@ -38,7 +38,7 @@ We use the following toolboxes (available in this github):
    
     mri-sim-py
     
-    py2jemris-master    
+    py2jemris-master  - https://github.com/imr-framework/py2jemris
 
    
     openjournals/joss-reviews#2478
