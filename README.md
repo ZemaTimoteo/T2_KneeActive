@@ -30,7 +30,7 @@ DISCLAIMER
 
 We use the following toolboxes (available in this github):
 
-    OPENGRAPPA - by Mark Griswold and  Felix Breuer (breuer@mr-bavaria.de)
+    GRAPPA_tutorial - by Mark Griswold and  Felix Breuer (breuer@mr-bavaria.de)
 
     UnRing_tool
 
