@@ -1,0 +1,156 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{colonequals}
+\usepackage{subfig}
+\usepackage[shortlabels]{enumitem}
+\usepackage[margin=1in]{geometry}
+\usepackage{caption}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{bm}
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+
+\theoremstyle{definition}
+\newtheorem{prob}{Problem}
+
+\usepackage{color}
+\usepackage{graphicx}
+%\graphicspath{./figs/}
+
+\newcommand{\TODO}{{\color{red}TODO}}
+\newcommand{\CC}{\mathbb{C}} % complex numbers
+\newcommand{\RR}{\mathbb{R}} % real numbers
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\ip}[2]{\langle #1, #2 \rangle}
+\newcommand{\ones}{\mathbf{1}}
+\newcommand{\nth}[1]{#1^{\mathrm{th}}}
+\newcommand{\TR}{\mathrm{TR}}
+\newcommand{\TE}{\mathrm{TE}}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\newcommand{\veca}[1]{\boldsymbol{#1}}
+
+\title{Optimal Experiment Design}
+\author{Jon Tamir}
+\begin{document}
+\maketitle
+
+
+\section{Signal Equation}
+The signal equation is
+\begin{align}
+  S_{ij}\left(M_0, T_1, T_2\right) &= M_0 f_i(T_1, T_2) \frac{1 - E_j(T_1)}{1 - E_j(T_1)f_T(T_1,T_2)},
+  \label{eqn:signaleq}
+\end{align}
+where $M_0$ is the initial longitudinal magnetization and $T_1$ and $T_2$ are relaxation parameters.
+The EPG function is
+\begin{align}
+  f_i(T_1, T_2) &= \mathrm{EPG}\left( \theta_1^i, T_1, T_2, T_s \right),
+  \label{eqn:epgfun}
+\end{align}
+where $\theta_1^i$ indicates the first $i$ refocusing pulses and $T_s$ is the echo spacing. The recovery function is
+\begin{align}
+  E_j(T_1) &= e^{-\frac{(\TR_j - (T+1)\times T_s)}{T_1}},
+  \label{eqn:recoveryfun}
+\end{align}
+where $\TR_j$ is the $\nth{j}$ repetition time.
+
+The Fisher Information Matrix (FIM) consists of the following six terms:
+
+\begin{align}
+  \vec{I} = \begin{bmatrix}
+  \frac{2}{\sigma^2} \sum_{ij}\left( \frac{\partial S_{ij}}{\partial T_1} \frac{\partial S_{ij}}{\partial T_1} \right) & 
+  \frac{2}{\sigma^2} \sum_{ij}\left( \frac{\partial S_{ij}}{\partial T_1} \frac{\partial S_{ij}}{\partial T_2} \right) &
+  \frac{2}{\sigma^2} \sum_{ij}\left(\frac{\partial S_{ij}}{\partial T_1} \frac{\partial S_{ij}}{\partial M_0} \right) \\
+  \cdot & \frac{2}{\sigma^2} \sum_{ij}\left( \frac{\partial S_{ij}}{\partial T_2} \frac{\partial S_{ij}}{\partial T_2} \right) &
+  \frac{2}{\sigma^2} \sum_{ij}\left( \frac{\partial S_{ij}}{\partial T_2} \frac{\partial S_{ij}}{\partial M_0} \right) \\
+  \cdot & \cdot &
+  \frac{2}{\sigma^2}\sum_{ij}\left(\frac{\partial S_{ij}}{\partial M_0} \frac{\partial S_{ij}}{\partial M_0} \right) &
+\end{bmatrix}.
+  \label{eqn:FIM}
+\end{align}
+
+For ease of notation, a function $f(x,y,z)$ will be referred to as $f(x)$ when it is understood that the other parameters
+are constants in the expression. Also, the partial derivative of a function $f(x,y,z)$ w.r.t.\ parameter $x$ will be denoted by $f'(x)$.
+We have
+\begin{align}
+  S_{ij}'(M_0) &= f_i \frac{1 - E_j}{1 - E_jf_T},
+  \label{eqn:dM0} \\
+  \begin{split}
+  S_{ij}'(T_1) &= M_0\left( 1 - E_j(T_1) \right)\frac{\left(f_i'(T_1)\left(1 - E_j(T_1) \right) - f_i(T_1)E_j'(T_1)\right)}
+  {\left(1 - f_TE_j\right)^2} \times \\
+  & \frac{\left(1 - f_T(T_1)E_j(T_1)\right) + f_i(T_1)\left(f_T'(T_1)E_j(T_1) + f_T(T_1)E_j'(T_1)\right)}
+  {\left(1 - f_TE_j\right)^2},
+  \label{eqn:dT1}
+  \end{split} \\
+  S_{ij}'(T_2) &= M_0\left( 1 - E_j \right)\frac{\left(f_i'(T_2)\left(1 - f_T(T_2)E_j \right) + f_i(T_2)f_T'(T_2)E_j\right)}
+  {\left(1 - f_TE_j\right)^2}.
+  \label{eqn:dT2}
+\end{align}
+
+The inverse of the FIM is a lower bound on the covariance matrix of an unbiased estimator of the parameters $\veca{\theta}=(T_1, T_2, M_r)$.
+Thus it reasons to minimize some metric of sub-matrix of $\vec I^{-1}$.
+Group the FIM into
+\begin{align}
+  \vec I &= \begin{bmatrix}
+    \vec I_{11} & \vec I_{12} \\ \vec I_{21} & \vec I_{22},
+  \end{bmatrix}
+  \label{eqn:FIMd}
+\end{align}
+where $\vec I_{11}$ represents the $2\times 2$ sub-matrix. Then the Schur complement of $\vec I$ w.r.t.\ $\vec I_{22}$ is
+
+\section{EPG Function}
+The EPG function is a recursive function of the signal magnetization and refocusing flip angles. For $T$ refocusing pulses, the EPG
+function $\vec f : \RR_+^2 \rightarrow \RR_+^T$ is
+\begin{align}
+  \vec f(T_1, T_2, \theta_1^T) = \begin{bmatrix} f_1 & \cdots & f_T \end{bmatrix}^T.
+  \label{eqn:epgvec}
+\end{align}
+
+Let the magnetization state after the $\nth{i}$ refocusing pulse be $\vec s_i \in \CC^{3(T+1)}$. The first entry of $\vec s_i$ represents the
+coherent transverse magnetization, $M_{xy}$, and the third entry represents the coherent longitudinal magnetization, $M_z$. The observed
+signal after the $\nth{i}$ pulse is then
+\begin{align}
+  f_i(T_1, T_2, \theta_1^i) &= \begin{bmatrix}1 & 0 & 0 & \cdots & 0 \end{bmatrix} \vec s_i(T_1, T_2, \theta_1^i)
+  \label{eqn:epgrec}
+\end{align}
+The initial magnetization state (after the 90 degree excitation pulse) is given by 
+\begin{align}
+  \vec s_0 &= \mathrm{vec}\left(\begin{bmatrix}
+    1 & 0 & 0 & \cdots & 0 \\
+    1 & 0 & 0 & \cdots & 0 \\
+    0 & 0 & 0 & \cdots & 0 
+\end{bmatrix}\right).
+  \label{eqn:s0}
+\end{align}
+One progression of the EPG states is given by
+\begin{align}
+  \vec s_i & = \vec E \left(\vec G \vec R_i\vec{GE}\vec s_{i-1} + \vec E_0 \right) + \vec E_0,
+  \label{eqn:skrec}
+\end{align}
+where $\vec E$, $\vec E_0$, $\vec G$, and $\vec R_i$ are defined in the conventional way for EPG.
+Thus,
+\begin{align}
+  \begin{split}
+    \nabla\vec s_i(T_1) &= \nabla\vec E(T_1)\left(\vec{GR}_i \vec{GE}(T_1)\vec s_{i-1}(T_1) + \vec E_0(T_1)\right)  \\
+    &+ \vec E(T_1)\left(\vec{GR}_i \vec{G}\left(\nabla\vec E(T_1)\vec s_{i-1}(T_1) + \vec E(T_1)\nabla\vec s_{i-1}(T_1)\right) + \nabla\vec E_0(T_1)\right)
+    + \nabla\vec E_0(T_1),
+  \end{split}
+  \label{eqn:dsdT1} \\
+  \begin{split}
+  \nabla\vec s_i(T_2) &= \nabla\vec E(T_2)\vec{GR}_i \vec{G}\left(\vec E(T_2)\vec s_{i-1}(T_2) + \vec E_0\right) \\
+  &+ \vec E(T_2)\left(\vec{GR}_i \vec{G}\left(\nabla\vec E(T_2)\vec s_{i-1}(T_2) + \vec E(T_2)\nabla\vec s_{i-1}(T_2)\right)\right).
+  \end{split}
+  \label{eqn:dsdT2}
+\end{align}
+
+
+\end{document}
+
