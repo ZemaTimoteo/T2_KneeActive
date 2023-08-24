@@ -40,14 +40,14 @@ We use the following toolboxes (available in this github):
     
     py2jemris-master  - https://github.com/imr-framework/py2jemris
 
-   
+    pulseq master - https://github.com/pulseq
+    
     openjournals/joss-reviews#2478
 
 
 ** To run the Matlab codes, download and add the following toolboxes to the Tools folder:
 
-    BART - https://mrirecon.github.io/bart/
-    Gridding - https://github.com/ndwork/griddingCodes
+
 
 ** To run the Python codes install the following toolboxes:
 
