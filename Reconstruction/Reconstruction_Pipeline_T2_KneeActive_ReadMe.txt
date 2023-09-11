@@ -1,4 +1,4 @@
-T2_KneeAtive - Reconstruction Pipeline
+T2_KneeActive - Reconstruction Pipeline
 
 -----------------
 
