@@ -33,8 +33,6 @@ We use the following toolboxes (available in this github):
     GRAPPA_tutorial - by Mark Griswold and  Felix Breuer (breuer@mr-bavaria.de)
 
     UnRing_tool
-
-    Pypulseq & Pulseq-master - https://github.com/imr-framework/pypulseq
    
     mri-sim-py
     
