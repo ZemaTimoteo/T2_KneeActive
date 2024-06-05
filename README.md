@@ -50,7 +50,11 @@ We use the following toolboxes (available in this github):
 
 
 ** To run the Python codes:
+
      - Step 1: this toolbox was texted and runned with Python 3.7.
+     
      - Step 2: Once you have installed that python version, you can install the following toolboxes according to the 'req.txt' in the folder 'Toolboxes\Python'. If you already have python 3.7 installed, be aware that, by installing this 'req.txt' you might be changing the versions of each toolbox in your virtual environment. The suggestion is to create a new virtual environement with Python 3.7 (link on instructions to do so: https://www.jetbrains.com/help/pycharm/creating-virtual-environment.html#python_create_virtual_env).
+     
      - Step 3: Download full code from mri-sim-py: | https://github.com/ut |  and add in a 'Toolboxes' folder
+     
      - Step 4: Download full code from pypulseq: | https://github.com/imr-framework/pypulseq | and add in a 'Toolboxes' folder
