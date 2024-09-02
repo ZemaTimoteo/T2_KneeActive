@@ -92,9 +92,9 @@ for jj=1:size(FA,2)
     
     signal    = rf_refoc.signal;
     
-    flipDeriv       = rf_refoc.flipDeriv;
-    aux_signalDeriv = rf_refoc.signalDeriv;
-    signalDeriv     = aux_signalDeriv/flipDeriv;
+    % % flipDeriv       = rf_refoc.flipDeriv;
+    % % aux_signalDeriv = rf_refoc.signalDeriv;
+    % % signalDeriv     = aux_signalDeriv/flipDeriv;
     
     % Calculate maxSignal amplitude - Global
     B1plus_rf_ref(jj)            = max(signal)/gamma * 1e6;                                       % (uT)
