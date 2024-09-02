@@ -1,0 +1,3 @@
+	-> Optimization of MSE
+    RF Tools   | John Pauly - https://rsl.stanford.edu/research/software.html ((RF Pulse Design - Matlab)
+    Pulseq     | Maxime Zaitsev - https://github.com/pulseq/pulseq
