@@ -12,7 +12,7 @@
 clear, clc
 
 % Initial Sets 
-testFSEopt  = 1;
+testFSEopt  = 2;
 
 
 %% 0 - Set matlab paths and toolboxes
@@ -26,27 +26,24 @@ toolbox_Path = [file_path([1:idx_tb_Path(end)-1]) 'Toolboxes'];
 cd(file_path)
 
 
-file_path_data      = [file_path 'Data'];
-file_path_rf        = [file_path_data 'rf_pulses'];
-
-filename_excell = 'parameters_&_bestResults.xlsx';
+file_path_data      = [file_path filesep 'Data'];
+file_path_rf        = [file_path_data filesep 'rf_pulses'];
 
 addpath(genpath(file_path))
 addpath(genpath(toolbox_Path))
 
 
 %% 1 - Tests
-
 plotTest    = 'Fals';       % 'True' or 'Fals'
 saveResults = 'True';
 
-testSAR     = 'loadD';      % For B1_rms test = 'b1rms' OR Loading data 'loadD' 
+testSAR     = 'b1rms';      % For B1_rms test = 'b1rms' OR Load data 'loadD' 
 testCRLB    = 'True';       % Test CRLB - 'True' OR Load CRLB - 'Fals'
-testFBP     = 'Fals';       % Test Flip-back pulse - 'True' or 'Fals'
-testTR      = 'Fals';
+writeExcel  = 'Fals';       % Write in an excell file
 
-testFastSampling  = 'GRAPP';      % for SENSE - 'SENSE' OR for GRAPPA - 'GRAPP' OR for LORAKS - ' LORAK'
-methodDic         = 'SLR_Prof';   % For CRLB - 'SLR_Prof' OR 'JUSTdict' OR '90DirSLR' OR '90SLRDir'
+testFastSampling = 'LORAK';      % for SENSE - 'SENSE' OR for GRAPPA - 'GRAPP' OR for LORAKS - ' LORAK'
+methodDic        = 'SLR_Prof';   % For CRLB - 'SLR_Prof' OR 'JUSTdict'
+testRFqual       = 'True';       % Quality fo RF (different slice Thickness in excitation and refocusing - Kumar et al. 2016 JMRI)
 
 %% 2 - Parameters to Optimize
 
@@ -55,6 +52,7 @@ B1 = 1;                             % B1 values for each we want to optimize FSE
 T1 = [1000 1000 1000];              % T1 max for knee and for T1 of GM @3T(ms)
 
 % ... 1.2 - Parameters of sequence ...
+T_acq             = 8;              % Time max of Acquisition in min - 8min
 nslices           = 25;             % number of slices - '30'
 res               = 256;            % Resolution Nx = Ny
 sliceThickn.exc   = 3e-3;           % Slice Thickness exc   (m) - '3e-3'
@@ -72,27 +70,36 @@ vector_T2         = [ 8 45 ];           % vector of different T2 values to test 
 
 % ... 1.4 - Parameters for generating EPG signals with slr_profile.py and my_epg.py ...
 TR      = 10;                % units (ms) in Keerthivasan et al. 2019
-T2_dic  = vector_T2;         % ms ( 40:1:55; OR 1:1:300; )
-B1_dic  = 1;                 % B1 value ( 0.7:0.01:0.75; OR 0.6:0.01:1.4; )
-
-% test - 22/11
-if testTR == 'True'
-    vector_TR = [1305 1939 2063 2189 2322 2460 2603 3779]; % in (ms)
-end
 
 % write in excell the parameters
 % ----
-cd(file_path_data)
-A1 = {'Test','ini_TR (ms)','nslices','res (mm)','sliceThickn ex (mm)','sliceThickn ref (mm)','SNR','min_T2 (ms)','max_T2 (ms)','Test FBP'};
-sheet = 1;
-xlRange = 'A1';
-xlswrite(filename_excell,A1,sheet,xlRange)
+if writeExcel == 'True'
+    filename_excell = 'parameters_&_bestResults.xlsx';
 
-A2 = {testFSEopt,TR,nslices,res,sliceThickn.exc,sliceThickn.refoc,vector_SNR(1),min(vector_T2),max(vector_T2),testFBP};
-sheet = 1;
-xlRange = ['A',num2str(testFSEopt)];
-xlswrite(filename_excell,A2,sheet,xlRange)
+    cd(file_path_data)
+    A1 = {'Test','ini_TR (ms)','nslices','res (mm)','sliceThickn ex (mm)','sliceThickn ref (mm)','SNR','min_T2 (ms)','max_T2 (ms)','Test FBP'};
+    sheet = 1;
+    xlRange = 'A1';
+    xlswrite(filename_excell,A1,sheet,xlRange)
+
+    A2 = {testFSEopt,TR,nslices,res,sliceThickn.exc,sliceThickn.refoc,vector_SNR(1),min(vector_T2),max(vector_T2)};
+    sheet = 1;
+    xlRange = ['A',num2str(testFSEopt)];
+    xlswrite(filename_excell,A2,sheet,xlRange)
+end
 % ----
+
+% Get parameters struct
+params             = [];
+params.npoints     = 52;                     % Number of points for the slr profile
+params.center_pos  = 0.5;                    % Center position of RFexc
+params.ParallelImg = testFastSampling;
+params.RFqual      = testRFqual;             % Quality fo RF (different slice Thickness in excitation and refocusing - Kumar et al. 2016 JMRI)
+params.dir_rf      = file_path_rf;
+params             = CF_CRLB_parameters(B1,T1(1),nslices,...
+                            res,sliceThickn, ...
+                            TR,vector_SNR(1),params); % Set parameters for Cost Function (CF)
+
 
 fprintf('\n\n 2 - Sucessfully finished -  Parameters to Optimize \n\n')
 
@@ -118,13 +125,12 @@ RFpower_max = 50;  % W
 maxB1_rms   = 5;   % uT - TODO tentar provocar os constrains
 
     % 3.2.2 - Acquisition Time
-T_acq     = 12;             % Time in min - 10/12min
 if testFastSampling == 'SENSE'
     af = 0.5;             % Acceleration factor
 elseif testFastSampling == 'GRAPP'
     af = 2/3;             % Acceleration factor 
 elseif testFastSampling == 'LORAK'
-    accFactor = 4;                 % af of LORAKS
+    accFactor = params.af;                 % af of LORAKS
     af = 1/5 + (4/5)/accFactor;    % Acceleration sampling of k-space
 end
 maxTime   = T_acq;  % units(min)
@@ -148,20 +154,9 @@ if testSAR == 'b1rms'
 
             for gg=1:length(vector_flipAngle)
 
-                % test - 22/11
-                if testTR == 'True'
-                    TR = vector_TR(gg); % in (ms)
-                end
-
-                if testFBP == 'Fals' % Test without Flip back pulse
-                    % - Values for RFpower, SAR and T_scan ...
-                    [b1_rms{jj,ii,gg},T_scan, TR_scan, Trec] = b1rms4seq_optFSE_TRvar(vector_dTE(jj), TR, ...
-                        vector_ETL(ii), vector_flipAngle(gg), sliceThickn, nslices, real_res,'Fals',file_path_rf);
-                else % Test with Flip back pulse
-                    % - Values for RFpower, SAR and T_scan ...
-                    [b1_rms{jj,ii,gg},T_scan, TR_scan, Trec] = b1rms4seq_optFSE_TRvar_FBP(vector_dTE(jj), TR, ...
-                        vector_ETL(ii), vector_flipAngle(gg), sliceThickn, nslices, real_res,'Fals');
-                end
+                % - Values for RFpower, SAR and T_scan ...
+                [b1_rms{jj,ii,gg},T_scan, TR_scan, Trec] = b1rms4seq_optFSE_TRvar(vector_dTE(jj), TR, ...
+                    vector_ETL(ii), vector_flipAngle(gg), sliceThickn, nslices, real_res,'Fals',file_path_rf);
 
                 % - check B1+rms values and max acq Time ...
                 if isnan(b1_rms{jj,ii,gg}) %Models_failed due to constrain b1_rms
@@ -192,41 +187,23 @@ if testSAR == 'b1rms'
 
     if saveResults == 'True'
         cd(file_path_data)
-
-        if testFBP == 'Fals'
-            save(['Test',num2str(testFSEopt),'_ConstrainModels_maxB1rms',num2str(maxB1_rms),'_maxTime',num2str(maxTime_s),...
-                '_mindTE',num2str(min(vector_dTE)),'_maxdTE',num2str(max(vector_dTE)), ...
-                '_minETL',num2str(min(vector_ETL)),'_maxETL',num2str(max(vector_ETL)), ...
-                '_minFlipA',num2str(min(vector_flipAngle)),'_maxFlipA',num2str(max(vector_flipAngle)),...
-                '.mat'],'Models_accepted','Models_failed','maxB1_rms','maxTime_s')
-        else
-            save(['Test',num2str(testFSEopt),'FPB_ConstrainModels_maxB1rms',num2str(maxB1_rms),'_maxTime',num2str(maxTime_s),...
-                '_mindTE',num2str(min(vector_dTE)),'_maxdTE',num2str(max(vector_dTE)), ...
-                '_minETL',num2str(min(vector_ETL)),'_maxETL',num2str(max(vector_ETL)),...
-                '_minFlipA',num2str(min(vector_flipAngle)),'_maxFlipA',num2str(max(vector_flipAngle)),...
-                '.mat'],'Models_accepted','Models_failed','maxB1_rms','maxTime_s')
-        end
+        save(['Test',num2str(testFSEopt),'_ConstrainModels_maxB1rms',num2str(maxB1_rms),'_maxTime',num2str(maxTime_s),...
+              '_mindTE',num2str(min(vector_dTE)),'_maxdTE',num2str(max(vector_dTE)), ...
+              '_minETL',num2str(min(vector_ETL)),'_maxETL',num2str(max(vector_ETL)), ...
+              '_minFlipA',num2str(min(vector_flipAngle)),'_maxFlipA',num2str(max(vector_flipAngle)),...
+              '.mat'],'Models_accepted','Models_failed','maxB1_rms','maxTime_s')
         cd(file_path)
     end
 
 
 
-elseif testSAR == 'loadD'
-    
+elseif testSAR == 'loadD'    
     cd(file_path_data)
-    if testFBP == 'Fals'
-        load(['Test',num2str(testFSEopt),'_ConstrainModels_maxB1rms',num2str(maxB1_rms),'_maxTime',num2str(maxTime_s),...
-            '_mindTE',num2str(min(vector_dTE)),'_maxdTE',num2str(max(vector_dTE)), ...
-            '_minETL',num2str(min(vector_ETL)),'_maxETL',num2str(max(vector_ETL)),...
-            '_minFlipA',num2str(min(vector_flipAngle)),'_maxFlipA',num2str(max(vector_flipAngle)),...
-            '.mat'])
-    else
-        load(['Test',num2str(testFSEopt),'FPB_ConstrainModels_maxB1rms',num2str(maxB1_rms),'_maxTime',num2str(maxTime_s),...
-            '_mindTE',num2str(min(vector_dTE)),'_maxdTE',num2str(max(vector_dTE)), ...
-            '_minETL',num2str(min(vector_ETL)),'_maxETL',num2str(max(vector_ETL)),...
-            '_minFlipA',num2str(min(vector_flipAngle)),'_maxFlipA',num2str(max(vector_flipAngle)),...
-            '.mat'])
-    end
+    load(['Test',num2str(testFSEopt),'_ConstrainModels_maxB1rms',num2str(maxB1_rms),'_maxTime',num2str(maxTime_s),...
+          '_mindTE',num2str(min(vector_dTE)),'_maxdTE',num2str(max(vector_dTE)), ...
+          '_minETL',num2str(min(vector_ETL)),'_maxETL',num2str(max(vector_ETL)),...
+          '_minFlipA',num2str(min(vector_flipAngle)),'_maxFlipA',num2str(max(vector_flipAngle)),...
+          '.mat'])
     cd(file_path)   
 end   
 toc
@@ -265,13 +242,15 @@ if testCRLB == 'True'
                 
                 % ... 4.2.2 - Get CRLB num and uncertainty  ...
                 %function [vardT2, ds_dT2, FF_tool, factorFPB_epg] = CRLB_epg_optFSE_TRvar_vF(rf_exc, B1, T1, T2, dTE, ETL, TRacq, Trec, flipA, sigma, plotTest,testFPB, dir_data, methodDic)                
-                [vardT2(ii,jj,gg),ds_dT2{ii,jj,gg},ff{ii,jj,gg},factorFBP(ii,jj,gg)] = ...
-                            CRLB_epg_optFSE_TRvar_vF(...
-                                            FA_exc_dic, B1, T1(gg),  vector_T2(gg),...
+                [ vardT2(ii,jj,gg), ...
+                  ds_dT2{ii,jj,gg}, ...
+                  ff{ii,jj,gg},     ...
+                  factorFBP(ii,jj,gg) ] = CRLB_epg_optFSE_TRvar_vF(FA_exc_dic,...
+                                            B1, T1(gg),  vector_T2(gg), ...
                                             Models_accepted(ii,1), Models_accepted(ii,2), ...
                                             TRacq, Models_accepted(ii,7), FA_refoc_dic, sigma(jj), ...
-                                            plotTest, testFBP, file_path_data, methodDic...
-                                            );
+                                            plotTest, file_path_data, methodDic,...
+                                            params);
                 
                 if plotTest  == 'True'
                     figure,plot(abs(ff{ii,jj,gg}),'*--'),hold on,
@@ -298,43 +277,23 @@ if testCRLB == 'True'
     
     % save CRLB data
     cd(file_path_data)
-    if testFBP == 'Fals'
-        save(['CRLBvalues_test',num2str(testFSEopt),...
-            '_TRvar_ModelsAccepted',num2str(size(Models_accepted,1)),...
-            '_minSNR',num2str(min(vector_SNR)),'_maxSNR',num2str(max(vector_SNR)), ...
-            '_minT2-',num2str(min(vector_T2)),'_maxT2-',num2str(max(vector_T2)),...
-            '.mat'],'vardT2','dEPG_dT2','EPG','factorFBP')
-    else
-        save(['CRLBvalues_FPB_test',num2str(testFSEopt),...
-            '_TRvar_ModelsAccepted',num2str(size(Models_accepted,1)),...
-            '_minSNR',num2str(min(vector_SNR)),'_maxSNR',num2str(max(vector_SNR)), ...
-            '_minT2-',num2str(min(vector_T2)),'_maxT2-',num2str(max(vector_T2)),...
-            '.mat'],'vardT2','dEPG_dT2','EPG','factorFBP')
-    end
+    save(['CRLBvalues_test',num2str(testFSEopt),...
+          '_TRvar_ModelsAccepted',num2str(size(Models_accepted,1)),...
+          '_minSNR',num2str(min(vector_SNR)),'_maxSNR',num2str(max(vector_SNR)), ...
+          '_minT2-',num2str(min(vector_T2)),'_maxT2-',num2str(max(vector_T2)),...
+          '.mat'],'vardT2','dEPG_dT2','EPG','factorFBP')
+
     cd(file_path)
     
 elseif testCRLB == 'Fals'
     % load CRLB data    
-    cd(file_path_data)
-    if testFBP == 'Fals'      
-        load(['CRLBvalues_test',num2str(testFSEopt),...
-            '_TRvar_ModelsAccepted',num2str(size(Models_accepted,1)),...
-            '_minSNR',num2str(min(vector_SNR)),'_maxSNR',num2str(max(vector_SNR)), ...
-            '_minT2-',num2str(min(vector_T2)),'_maxT2-',num2str(max(vector_T2)),...
-            '.mat'])
-    else
-        load(['CRLBvalues_FPB_test',num2str(testFSEopt),...
-            '_TRvar_ModelsAccepted',num2str(size(Models_accepted,1)),...
-            '_minSNR',num2str(min(vector_SNR)),'_maxSNR',num2str(max(vector_SNR)), ...
-            '_minT2-',num2str(min(vector_T2)),'_maxT2-',num2str(max(vector_T2)),...
-            '.mat'])
-    end
+    cd(file_path_data)   
+    load(['CRLBvalues_test',num2str(testFSEopt),...
+          '_TRvar_ModelsAccepted',num2str(size(Models_accepted,1)),...
+          '_minSNR',num2str(min(vector_SNR)),'_maxSNR',num2str(max(vector_SNR)), ...
+          '_minT2-',num2str(min(vector_T2)),'_maxT2-',num2str(max(vector_T2)),...
+          '.mat'])
     cd(file_path)
-end
-
-if testFBP == 'True'
-    aa = reshape(factorFBP,size(factorFBP,1)*size(factorFBP,3),1);
-    figure();plot(aa) 
 end
 
 
@@ -524,11 +483,13 @@ fprintf(['\n\n            ... Optimized Results with CRLB variance/T2 ... \n\n']
 for gg=1:size(vector_T2,2)
     % write in excell the 
     
-    B = {'Test','log(T2 max variance)','T2 (ms)','dTE (ms)','ETL','SNR','flipAngle (º)','Trec (s)','TR_acq (s)'};
-    sheet = 1+gg;
-    xlRange_title = 'A1';
-    xlswrite(filename_excell,B,sheet,xlRange_title)
-    
+    if writeExcel == 'True'
+        B = {'Test','log(T2 max variance)','T2 (ms)','dTE (ms)','ETL','SNR','flipAngle (º)','Trec (s)','TR_acq (s)'};
+        sheet = 1+gg;
+        xlRange_title = 'A1';
+        xlswrite(filename_excell,B,sheet,xlRange_title)
+    end
+
     fprintf(['-------------------\n\n'])
     
     [maxValue_vardT2(gg), indxResult_vardT2] = (max( (Results_vardT2(:,T2indx-aux_T2indx+gg)) ) ) ;
@@ -557,8 +518,12 @@ for gg=1:size(vector_T2,2)
             Results_vardT2(indxResult_vardT2,2),SNR_val,...
             Results_vardT2(indxResult_vardT2,3),...
             Results_vardT2(indxResult_vardT2,9)};
-    xlRange_T2 = ['A',num2str(testFSEopt)];
-    xlswrite(filename_excell,C,sheet,xlRange_T2)    
+
+    if writeExcel == 'True'
+        xlRange_T2 = ['A',num2str(testFSEopt)];
+        xlswrite(filename_excell,C,sheet,xlRange_T2)    
+    end
+
 end
 
 
