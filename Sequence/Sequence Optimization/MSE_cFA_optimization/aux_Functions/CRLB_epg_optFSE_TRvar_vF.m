@@ -1,6 +1,6 @@
 
 
-function [vardT2, ds_dT2, FF_tool, factorFPB_epg] = CRLB_epg_optFSE_TRvar_vF(rf_exc, B1, T1, T2, dTE, ETL, TRacq, Trec, flipA, sigma, plotTest,testFBP, dir_data, methodDic)
+function [vardT2, ds_dT2, FF_tool, factorFPB_epg] = CRLB_epg_optFSE_TRvar_vF(rf_exc, B1, T1, T2, dTE, ETL, TRacq, Trec, flipA, sigma, plotTest,dir_data, methodDic, params)
 % Obtain the variance expected for a specific model/set of parameters
 %
 % Functions used:
@@ -57,7 +57,8 @@ if methodDic == 'SLR_Prof'
     % 1.2.1 - RF pulses
     refoc_puls = [];
     for jj=1:size(flipA,2)
-        [exc_puls, aux_refoc_puls] = slr_profile_vF(rf_exc,B1,flipA(jj),dir_rf);
+        [exc_puls, aux_refoc_puls] = slr_profile_wRFoptimz_design(rf_exc,B1,flipA(jj),params);
+
         refoc_puls                 = [refoc_puls aux_refoc_puls(:)];  
     end
 
@@ -73,35 +74,6 @@ elseif methodDic == 'JUSTdict'
     
     % 1.2.2 - Get Derivatives
     [ ~, grad_tool, FF_tool ] = epg_derivatives_vF(nEchoes,tau,R1,R2,alpha_RF, flipAngles);
-
-elseif methodDic == '90DirSLR'
-    clear grad_tool FF_tool
-    % 1.2.1 - RF pulses
-    refoc_puls = [];
-    for jj=1:size(flipA,2)
-        [~, aux_refoc_puls] = slr_profile(B1,flipA(jj),dTE,'HSM2',dir_data);
-        refoc_puls                 = [refoc_puls aux_refoc_puls(:)];  
-    end 
-    alpha_RF  = FA_exc*pi/180;  % Flip Angle in (rad)            
-    exc_pulse = repmat(alpha_RF,size(refoc_pulse,1),1); 
-    
-    % 1.2.2 - Get Derivatives
-    [ ~, grad_tool, FF_tool ] = epg_derivatives_vF(nEchoes,tau,R1,R2,exc_pulse, refoc_puls);
-
-elseif methodDic == '90SLRDir'
-    clear grad_tool FF_tool
-    % 3.2.1 - RF pulses
-    refoc_puls = [];
-    exc_puls   = [];
-    for jj=1:size(flipA,2)
-        [exc_puls, ~] = slr_profile(B1,flipA(jj),dTE,'HSM2',dir_data);
-    end    
-    radAngle   = flipA*pi/180*B1;  % Flip Angle in (rad)
-    refoc_puls = repmat(radAngle,size(exc_pulse_3,1),size(flipA,2));
-    
-    % 1.2.2 - Get Derivatives
-    [ ~, grad_tool, FF_tool ] = epg_derivatives_vF(nEchoes,tau,R1,R2,exc_pulse,refoc_puls);  
-    
 end
 
 % 1.3 - Get Variables
@@ -115,25 +87,10 @@ ds_dFA = grad_tool.ds_dFA; % derivative over Flip Angle
 norm_epgData     = FF_tool ;
 norm_ds_tool_dT2 = ds_dT2;
 
-% 1.5 ========= Control for FBP - (eq.3 - Keerthivasan, 2019) =============
-if testFBP == 'True'
-    % 1.5.1 - Control for Trec - EPG
-    aux_norm_epgData = norm_epgData;
-    auxVariab_S_T2 = exp( - Trec/T1); % control for Trecovery & TR variation
-    aux2var_S_T2   = (1 - auxVariab_S_T2) / ( 1 - auxVariab_S_T2 * norm_epgData(ETL) );
-    aux2var_S_dT2  = (1 - auxVariab_S_T2) / ( 1 - auxVariab_S_T2 * norm_ds_tool_dT2(ETL) );
-    norm_epgData   = aux2var_S_T2.* norm_epgData;   
-
-    % 1.5.2 - Calculate factor
-    factorFPB_epg = mean(abs(norm_epgData./aux_norm_epgData));
-    
-    % 1.5.3 - Control for Trec - Derivative
-    norm_ds_tool_dT2 = aux2var_S_dT2.*norm_epgData + aux2var_S_T2.* norm_ds_tool_dT2;   
-else
-    factorFPB_epg    = 1- exp( - Trec /T1); % control for Trecovery & TR variation - need for specific T1
-    norm_epgData     = factorFPB_epg.* norm_epgData;   
-    norm_ds_tool_dT2 = factorFPB_epg.* norm_ds_tool_dT2;   
-end
+% 1.5 ========= Control for Recovery - (eq.3 - Keerthivasan, 2019) =============
+factorFPB_epg    = 1- exp( - Trec /T1); % control for Trecovery & TR variation - need for specific T1
+norm_epgData     = factorFPB_epg.* norm_epgData;   
+norm_ds_tool_dT2 = factorFPB_epg.* norm_ds_tool_dT2;   
 
 %% ... 2 - Figures ...
 if plotTest == 'True'   
