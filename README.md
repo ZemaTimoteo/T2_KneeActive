@@ -4,7 +4,7 @@
 
 INTRODUCTION
 
-Toolbox for Quantitative Knee Imaging - T2 mapping - based on Multi (Turbo) Spin-Echo Sequence.
+Toolbox for Quantitative Knee Imaging - T2 mapping - based on Multi Spin-Echo Sequence.
 
 
 T2 is a promising MRI biomarker, with applications including detecting early cartilage degeneration. Fitting a mono-exponential model to multi-spin-echo (MSE) measurements is typical for clinical T2 mapping. However, as the signal deviates from this model due to echoes caused by unwanted pathways, dictionary-based estimation approaches were proposed. A dictionary of echo modulation curves (EMC) is predicted using the Extended Phase Graphs (EPG) formalism, considering all acquisition parameters and a range of expected tissue parameters (T1 and T2); mapping consists of finding the best match to the measured signal. We proposed an MSE pulse sequence optimization for dictionary-based cartilage T2-mapping, following up on promising results in the knee and hip cartilages. 
