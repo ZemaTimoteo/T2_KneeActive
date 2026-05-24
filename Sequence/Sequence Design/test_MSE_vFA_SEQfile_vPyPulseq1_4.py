@@ -21,45 +21,20 @@ from scipy.io import savemat
 from scipy.interpolate import interp1d
 from pathlib import Path
 
-PC = 0  # Seia=1 or myPC=0
+import pypulseq
 
-if PC == 1:
-    sys.path.insert(1, '/home/tfernandes/Documents/PYTHON/Toolboxes/pypulseq')
-    os.chdir('/home/tfernandes/Documents/PYTHON/Toolboxes/pypulseq')
-    from Sequence.sequence import Sequence
-    from calc_duration import calc_duration
-    from make_adc import make_adc
-    from make_delay import make_delay
-    from make_sinc_pulse import make_sinc_pulse
-    from make_gauss_pulse import make_gauss_pulse
-    from make_sinc_pulse_channel import make_sinc_pulse_channel
-    from make_trap_pulse import make_trapezoid
-    from make_arbitrary_grad import make_arbitrary_grad
-    from make_extended_trapezoid import make_extended_trapezoid
-    from opts import Opts
+from pypulseq.Sequence.sequence import Sequence
+from pypulseq.calc_rf_center import calc_rf_center
+from pypulseq.make_adc import make_adc
+from pypulseq.make_delay import make_delay
+from pypulseq.make_extended_trapezoid import make_extended_trapezoid
+from pypulseq.make_sinc_pulse import make_sinc_pulse
+from pypulseq.make_gauss_pulse import make_gauss_pulse
+from pypulseq.make_trapezoid import make_trapezoid
+from pypulseq.opts import Opts
+from pypulseq.calc_duration import calc_duration
+from pypulseq.make_block_pulse import make_block_pulse
 
-    sys.path.insert(1, '/home/tfernandes/Documents/PYTHON/Toolboxes/pypulseq/Sequence')
-
-    sys.path.append('/home/tfernandes/Documents/PYTHON/Toolboxes')
-    os.chdir('/home/tfernandes/Documents/Projetos/Project_lfStroke/Code/1_pythonCodes/B0_ECC')
-
-elif PC == 0:
-    import pypulseq
-
-    from pypulseq.Sequence.sequence import Sequence
-    from pypulseq.calc_rf_center import calc_rf_center
-    from pypulseq.make_adc import make_adc
-    from pypulseq.make_delay import make_delay
-    from pypulseq.make_extended_trapezoid import make_extended_trapezoid
-    from pypulseq.make_sinc_pulse import make_sinc_pulse
-    from pypulseq.make_gauss_pulse import make_gauss_pulse
-    from pypulseq.make_trapezoid import make_trapezoid
-    from pypulseq.opts import Opts
-    from pypulseq.calc_duration import calc_duration
-    from pypulseq.make_block_pulse import make_block_pulse
-
-    # sys.path.append('D:/Tiago/Trabalho/2021_2025_PhD/Projects/Toolboxes/Python/py2jemris')
-    # os.chdir('D:/Tiago/Trabalho/2021_2025_PhD/Projects/Toolboxes/Python/py2jemris')
 
 # %% ===========================================================================
 user_profile = os.environ.get("USERPROFILE") or os.environ.get("HOME")  # Check user home directory
@@ -71,7 +46,9 @@ if user_profile:
 # %% --- 0 - Settings ---
 #####
 
-save_flag   = False  # save file
+save_flag   = True  # save file
+
+selectDir   = ''     # selected directory for save
 
 # Types of Test
 diffST_Test      = True      # True - Different slice thickness for exc and refoc | False - Same slice thickness for exc and refoc
@@ -107,7 +84,7 @@ else:
 
 # optimization Parameters - input parameters
 experiment_id = 1000
-n_slices      = 5      # slices
+n_slices      = 15      # slices
 T2            = 45     # in ms
 
 
@@ -237,12 +214,9 @@ elif unfoldTest == False:
 readout_time     =  ( math.ceil(dwell_time * i_raster_time * Nx) + math.ceil(2*delay_adc * i_raster_time)) /  i_raster_time   # time of readout (in s)
 
 # readout_time     = Nx*system
-#t_ex             = 3.50e-3                                                  # time of excitation rf_pulse   - 2.9376e-3
 t_ex             = 2.8e-3                                                   # time of excitation rf_pulse   - 2.9376e-3 (in s)
-#t_ex             = 0.8e-3                                                  # time of excitation rf_pulse   - 2.9376e-3
 t_exwd           = t_ex + rf_ringdown_time + rf_dead_time                   # time of excitation window| time of excitation + ringdown time + dead time
 t_ref            = 1.6e-3                                                   # time of refocusing rf_pulse  - 1.5232e-3
-# t_ref            = 2e-3                                                   # time of refocusing rf_pulse  - 1.5232e-3
 t_refwd          = t_ref + rf_ringdown_time + rf_dead_time                  # time of refocusing window| time of refocusing + ringdown time + dead time
 t_sp             = 0.5 * (TE - readout_time - t_refwd)                      # time of spoiler| TE>dG & cannot be smaller than readout_time + refwindow
 t_spex           = 0.5 * (TE - t_refwd) - (1-symmetricVal) * t_ex - 0.5 * (
@@ -860,11 +834,8 @@ if ktrajTest:
 
 
 if save_flag:
-    if PC == 1:
-        os.chdir('/home/tfernandes/Documents/Projetos/Project_Cartilage/Data/qMRI/MSE')
-    else:
-        dir = 'C:/Users/filia/Documentss/PhD/Projetos/qMRI/Sequences/MSE'
-        os.chdir('C:/Users/filia/Documents/PhD/Projetos/qMRI/Sequences/MSE')
+    dir = selectDir
+    os.chdir(selectDir)
 
     folder_name = 'test%s_MSE_vFA_T2_%sms' % (experiment_id, T2) + '_acc_' + accTest
     seq_name = 'test%s_pypul_1_4_2_MSE_vFA_T2-%sms_nEchos-%s_nSlices-%s_TE-%sms_TR-%sms_FOV-%smm_Nx-%s_Ny-%s_gm-%s_sm-%s_sTexc-%smm_sTrefoc-%smm' % (
