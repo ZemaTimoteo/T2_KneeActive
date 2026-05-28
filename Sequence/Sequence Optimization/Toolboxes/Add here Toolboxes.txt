@@ -2,3 +2,5 @@
     RF Tools   | John Pauly - https://rsl.stanford.edu/research/software.html ((RF Pulse Design - Matlab)
     Pulseq     | Maxime Zaitsev - https://github.com/pulseq/pulseq
 	MonteCarlo_simTool
+
+	-> Unzip rf_tools - in order to have the rf pulses shapes
