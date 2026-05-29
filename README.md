@@ -59,4 +59,4 @@ We use the following toolboxes (available in this github):
      
      - Step 3: Download full code from mri-sim-py: | https://github.com/utcsilab/mri-sim-py | by doing git clone 'weblink from toolbox'
      
-     - Step 4: Download full code from pypulseq: | https://github.com/imr-framework/pypulseq |  by doing git clone 'weblink from toolbox'
+     - Step 4: Download full code from pypulseq: | https://github.com/imr-framework/pypulseq |  by doing git clone 'weblink from toolbox' (compatible with version 1.4.0'
