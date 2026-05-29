@@ -24,6 +24,7 @@ Helps reconstruct the T2 maps from Knee images - from the '.dat' file from the S
 
 The present implementation aims to contribute towards the development of open-source tools for MRI in order to make MRI more accessible, particularly on quantitative T2 maps.
 
+
 DATA
 
 Sampled Data (Phantom and Knee) is available at: https://osf.io/28qz3/overview
