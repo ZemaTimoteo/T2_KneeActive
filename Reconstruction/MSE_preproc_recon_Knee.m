@@ -1,4 +1,4 @@
-% MSE_preproc_recon_vF.m function
+ % MSE_preproc_recon_vF.m function
 %     - Complementary function of python code, recon GRAPPA OR LORAKS and creates
 %     NIFTI files for denoising and removing Gibbs rings with MRTRIX in
 %     Linux.
@@ -9,37 +9,65 @@
 
 clear all
 clc
-% close all
+% close all   
 
 
 % toolboxes
-cd('D:\Tiago\Trabalho\2021_2025_PhD\Projects\qMRI_Joint\Code\matlabCode\MSE_recon\GRAPPA')
-addpath(genpath('D:\Tiago\Trabalho\2021_2025_PhD\Projects\qMRI_Joint\Code\matlabCode\MSE_recon\aux_Functions'));
-addpath(genpath('D:\Tiago\Trabalho\2021_2025_PhD\Projects\qMRI_Joint\Code\matlabCode\Toolboxes\UnRing_tool'))
-addpath(genpath('D:\Tiago\Trabalho\2021_2025_PhD\Projects\qMRI_Joint\Code\matlabCode\Tutorials\GRAPPA_tutorial'));
-addpath(genpath('D:\Tiago\Trabalho\2021_2025_PhD\Projects\qMRI_Joint\Code\matlabCode\Toolboxes\LORAKS_V2.1'))
+% Active path
+filePath                 = matlab.desktop.editor.getActiveFilename;
+justPath                 = find(filePath == 'M');
+DIR_DataReconstruction = filePath([1:justPath(end)-1]); clear filePath
+idx_tb_Path              = find(DIR_DataReconstruction == 'R');
+toolbox_Path             = [DIR_DataReconstruction([1:idx_tb_Path(end)-1]) 'Toolboxes']; 
+Data_Path                = [DIR_DataReconstruction([1:idx_tb_Path(end)-1]) 'Data']; 
+cd(DIR_DataReconstruction)
+
+addpath(genpath(DIR_DataReconstruction))
+addpath(genpath(toolbox_Path))
+
 
 % test
-plotTest     = 'True';
-niftTest     = 'Fals';
-maskTest     = 'Fals';
-ParallelTest = 'LORAK'; % 'GRAPP' or 'SENSE' or 'LORAK'
+plotTest      = 'True';
+niftTest      = 'True';
+dicomTest     = 'Fals';      % 'True' OR 'Fals'
+maskTest      = 'Fals';
+allSliceTest  = 'True';      % Test in all slices 'True' OR 'Fals' only one slice
+CombinnedTest = 'Fals';
+
+ParallelTest = 'LORAK';     % 'GRAPP' or 'SENSE' or 'LORAK' or 'noAcc'
+LORAKStest   = 'ACloraks';  % 'P_loraks' OR 'ACloraks'
+typeTest     = 'PROC';      % 'LOAD' load data | 'PROC' process data
+AllSave      = 'Fals';      % 'True' Save kspace, image space and coils | 'Fals' Just save image (much smaller data)
+
 % filterTest   = 'True';
 
-slice = 1;
+% Paramteres
+if allSliceTest == 'Fals'
+    slice = 7;
+    iniSlice = slice;
+else
+    iniSlice = 1;
+end
+
+slicePlot = iniSlice;
 echo  = 1;
 
 %% 1 - load
 % select directory for recon.
-myCD = 'C:\Users\filia\Documents\PhD\Projetos\qMRI\Knee\';
-cd(myCD)
+cd(Data_Path)
 
-% get dir
+% get dir - where file with .mat of data is
 str = {'select file'};
 data_dir=uigetdir;
+dir_slices = [data_dir filesep 'reconSlices'];
+
 cd(data_dir)
 
 mkdir([data_dir '\results'])
+mkdir([dir_slices])
+
+% load parameters
+load('sequence_info.mat')
 
 % load file
 if ParallelTest == 'GRAPP'
@@ -58,21 +86,31 @@ elseif ParallelTest == 'LORAK'
 
     % Load Data
     load('LORAKS_for_data_test.mat') % aux_k - size(Nx, coils, Ny, nslice, nechoes)
-    aux_k              = double(aux_k);
+    aux_k             = double(aux_k);
     sparseMask_Kspace = double(mask_Kspace);
     
     % Get Full Matrices
     [Nx,ncoils,Ny_real,nsli,ETL] = size(aux_k);
-    full_Kspace                     = zeros(Nx, Nx, ncoils,ETL,nsli);  % Get Kspace Full
-    fullMask_Kspace                 = zeros(Nx, Nx, ncoils,ETL,nsli);  % Get mask Kspace Full
-    perm_aux_k                      = permute(aux_k,[3,1,2,4,5]);
+    if allSliceTest == 'Fals'
+        nsli      = 1;  % Selected by the user
+        SliceSize = slice; 
+    else
+        SliceSize =  nsli;
+    end
 
-    for sli=1:nsli
+    full_Kspace       = zeros(Nx, Nx, ncoils,ETL,nsli);  % Get Kspace Full
+    fullMask_Kspace   = zeros(Nx, Nx, ncoils,ETL,nsli);  % Get mask Kspace Full
+    perm_aux_k        = permute(aux_k,[3,1,2,4,5]);    
+
+    aux_sli = 1;
+    for sli=iniSlice:SliceSize
         for echo = 1:ETL
-            Ny_vector                             = find(sparseMask_Kspace(:,echo)==1);
-            full_Kspace(Ny_vector,:,:,echo,sli)   = perm_aux_k(:,:,:,sli,echo);
-            fullMask_Kspace(Ny_vector,:,:,echo,:) = 1;
+            Ny_vector                               = find(sparseMask_Kspace(:,echo)==1);
+            full_Kspace(Ny_vector,:,:,echo,aux_sli) = perm_aux_k(:,:,:,sli,echo);
+            fullMask_Kspace(Ny_vector,:,:,echo,:)   = 1;
         end
+
+        aux_sli = aux_sli+1;
     end
 
     % Figures
@@ -88,181 +126,452 @@ elseif ParallelTest == 'LORAK'
 
 end
 
+cd(data_dir)
+load('sequence_info.mat')
+
 %% 2 - Recon Acceleration
 tic
-%% 2.1 - SENSE
-if ParallelTest == 'SENSE'
-    
-    
- %% 2.2 - GRAPPA
- elseif ParallelTest == 'GRAPP'
-    % -------------- 2 - Get data for GRAPPA ----------    
-    % 2.1 - Parameters
-    sig_red  = permute(aux_k,[2 3 1 4 5]);       % coils, Ny, Nx
-    af       = double(R);                    % Acceleration data
-%     acs      = sig_red(:, iniKfull+1:endKfull, size(sig_red,3)/2+1-fullLin/2:size(sig_red,3)/2+fullLin/2, :, :); % coils, Ny, Nx, nslice, nechoes    
-    acs      = sig_red(:, iniKfull+1:endKfull, :, :, :); % coils, Ny, Nx, nslice, nechoes    
-    ksize_x  = 3; % kernel size
-    ksize_y  = 2; % kernel size
-    
-    figure()
-    imagesc(abs(squeeze(acs(coil,:,:,1,1))));
-    clear aux_k_csm coil_map alias_img           
-    
-    % ------------- 3 - Apply GRAPPA --------------------------
-    % Inputs:
-    %   -> sig_red - Reduced data set      (Nc,Ny/r,Nx)  (Nc - number of coils)
-    %   -> acs     - Coil sensitivity maps (Nc,Nx,Ny) reduced dimentions
-    %   -> af      - Reducion Factor of GRAPPA
-    %   -> ksize_x - Kernel size of xx
-    %   -> ksize_y - Kernel size of yy
-    % Ouputs
-    %   -> recon - reconstructed image (Nx,Ny)
-    
-    % --- 3.1.0 Initialize ---
-    [ncoils,orgSizeNx,Nx,nsli,ETL] = size(sig_red);
-    Ny                             = Nx;
-    sigrecon                       = zeros(ncoils,Nx,Ny,nsli,ETL);
-    for ii=1:nsli
-        for jj=1:ETL
-            % 3.0 - Get kdata
-            kdata = sig_red(:,[[1:iniKfull+1] [iniKfull+2:af:endKfull+2] [endKfull+1+2:orgSizeNx]],:,ii,jj); % the plus 1 is because of python index, the +2 is to get new position
-                       
-            % 3.1 - Apply GRAPPA
-            [~,~,sigrecon] = opengrappa_test( ...
-                kdata, acs, af, ksize_x, ksize_y ...
-                );
+
+if typeTest == 'PROC'
+    % 2.1 - SENSE
+    if ParallelTest == 'SENSE'
 
 
-            % 3.2 - get recon signal & image
-            sigrecon_full = sigrecon;
-            
-            % 3.3 - Recon data
-            out      = ifftshift(ifftshift(ifft(ifft(ifftshift(ifftshift(sigrecon,2),3),[],2),[],3),2),3);
-            
-            % 3.4 - Export
-            aux_kdata_PI(:,:,:,ii,jj) = sigrecon_full;
-            aux_img_PI(:,:,:,ii,jj)   = out;
+        % 2.2 - GRAPPA
+    elseif ParallelTest == 'GRAPP'
+        % -------------- 2 - Get data for GRAPPA ----------
+        % 2.1 - Parameters
+        sig_red  = permute(aux_k,[2 3 1 4 5]);   % coils, Ny, Nx
+        af       = double(R);                    % Acceleration data
+        %     acs      = sig_red(:, iniKfull+1:endKfull, size(sig_red,3)/2+1-fullLin/2:size(sig_red,3)/2+fullLin/2, :, :); % coils, Ny, Nx, nslice, nechoes
+        acs      = sig_red(:, iniKfull+1:endKfull, :, :, :); % coils, Ny, Nx, nslice, nechoes
+        ksize_x  = 3; % kernel size
+        ksize_y  = 2; % kernel size
 
-            % 3.5 - Get data from all coils
-            recon_Img_full(:,:,ii,jj) = squeeze(sum(abs(aux_img_PI(:,:,:,ii,jj).^2),1).^.5);  % LS method for coil combination % size(aux_img_PI) = 18 258 256 3 12
-                        
-            % save nift
-            if niftTest == 'True'
-                v(:,:,ii,jj) = recon_Img_full;
+        figure()
+        imagesc(abs(squeeze(acs(coil,:,:,1,1))));
+        clear aux_k_csm coil_map alias_img
 
-                dir_prefilter = [data_dir '\imagResults_orig'];
-                mkdir(dir_prefilter)
-                cd(dir_prefilter)
-                niftiwrite(v,'imageRecon_prefilter.nii');
-                cd(data_dir)
+        % ------------- 3 - Apply GRAPPA --------------------------
+        % Inputs:
+        %   -> sig_red - Reduced data set      (Nc,Ny/r,Nx)  (Nc - number of coils)
+        %   -> acs     - Coil sensitivity maps (Nc,Nx,Ny) reduced dimentions
+        %   -> af      - Reducion Factor of GRAPPA
+        %   -> ksize_x - Kernel size of xx
+        %   -> ksize_y - Kernel size of yy
+        % Ouputs
+        %   -> recon - reconstructed image (Nx,Ny)
+
+        % --- 3.1.0 Initialize ---
+        [ncoils,orgSizeNx,Nx,nsli,ETL] = size(sig_red);
+        if allSliceTest == 'Fals'
+            nsli      = 1;  % Selected by the user
+            SliceSize = slice;
+        else
+            SliceSize =  nsli;
+        end
+
+        Ny                             = Nx;
+        sigrecon                       = zeros(ncoils,Nx,Ny,nsli,ETL);
+        for sli=iniSlice:SliceSize
+            for jj=1:ETL
+                % 3.0 - Get kdata
+                kdata = sig_red(:,[[1:iniKfull+1] [iniKfull+2:af:endKfull+2] [endKfull+1+2:orgSizeNx]],:,ii,jj); % the plus 1 is because of python index, the +2 is to get new position
+
+                % 3.1 - Apply GRAPPA
+                [~,~,sigrecon] = opengrappa_test( ...
+                    kdata, acs, af, ksize_x, ksize_y ...
+                    );
+
+
+                % 3.2 - get recon signal & image
+                sigrecon_full = sigrecon;
+
+                % 3.3 - Recon data
+                out      = ifftshift(ifftshift(ifft(ifft(ifftshift(ifftshift(sigrecon,2),3),[],2),[],3),2),3);
+
+                % 3.4 - Export
+                aux_kdata_PI(:,:,:,ii,jj) = sigrecon_full;
+                aux_img_PI(:,:,:,ii,jj)   = out;
+
+                % 3.5 - Get data from all coils
+                recon_Img_full(:,:,ii,jj) = squeeze(sum(abs(aux_img_PI(:,:,:,ii,jj).^2),1).^.5);  % LS method for coil combination % size(aux_img_PI) = 18 258 256 3 12
+
+                % save nift
+                if niftTest == 'True'
+                    v(:,:,ii,jj) = recon_Img_full;
+
+                    dir_prefilter = [data_dir '\imagResults_orig'];
+                    mkdir(dir_prefilter)
+                    cd(dir_prefilter)
+                    niftiwrite(v,'imageRecon_prefilter.nii');
+                    cd(data_dir)
+                end
+
+                fprintf(['  --  GRAPPA recon for echo ',num2str(jj),' / ',num2str(ETL),'\n\n'])
             end
-            
-            fprintf(['  --  GRAPPA recon for echo ',num2str(jj),' / ',num2str(ETL),'\n\n'])            
+        end
+
+    elseif ParallelTest == 'LORAK'
+        % -------------- 2 - Get data for LORAK ----------
+        % 2.1 - Parameters
+        accFactor  = double(R);
+        rankLORAKS = 45;
+        Ny         = Nx;
+        if CombinnedTest == 'Fals'
+            if allSliceTest == 'True'
+                sigrecon   = zeros(ncoils,Nx,Ny,ETL);
+            else
+                sigrecon   = zeros(ncoils,Nx,Ny,nsli,ETL);
+            end
+        end
+%         nsli = 1; % Avoid recon in all slices
+        % ------------- 3 - Apply LORAKS --------------------------
+        % Inputs:
+        %   -> kdata            - Reduced data set      (Nx, Ny, ncoils,ETL,nsli)
+        %   -> mask             - Mask of full_kspace   (Nx, Ny, ncoils,ETL,nsli)
+        %   -> rankLORAKS       - Reducion Factor of LORAKS
+        % Ouputs
+        %   -> Full_Kspace - reconstructed image (Nx,Ny)
+        
+        for aux_sli=1:size(full_Kspace,5)
+
+            if CombinnedTest == 'True'
+                
+                % 3.0 - Get kdata
+                kdata         = reshape(full_Kspace,[Nx Ny ncoils*ETL]);
+                mask          = reshape(fullMask_Kspace,[Nx Ny ncoils*ETL]);
+
+                D_min         = 4;
+                divisors      = find(mod(ncoils*ETL, 1:ncoils*ETL) == 0);
+                dividProcess  = divisors(find(divisors > D_min, 1));
+                intervProcess = (ncoils*ETL) / dividProcess;
+
+                aux_sigrecon  = zeros((ncoils*ETL),Nx,Ny,nsli);
+
+                for dvProc=1:dividProcess
+                    intervStudy = 1+(dvProc-1)*intervProcess:intervProcess:intervProcess*dvProc;
+
+                    % 3.1 - Apply LORAKS
+                    if LORAKStest == 'P_loraks'
+                        aux_sigrecon(:,:,:,aux_sli) = P_LORAKS( kdata(:,:,intervStudy), mask(:,:,intervStudy), rankLORAKS );  % Under sampled Data, Mask, Rank
+                    elseif LORAKStest == 'ACloraks'
+                        aux_sigrecon(intervStudy,:,:,aux_sli) = ...
+                            AC_LORAKS( squeeze(kdata(:,:,intervStudy)), squeeze(mask(:,:,intervStudy)), rankLORAKS );  % Under sampled Data, Mask, Rank
+                    end
+                    fprintf(['  --  LORAKS recon slice: ',num2str(dvProc) ,' / ' ,num2str(dividProcess) ,' Combained Coils and Echoes'])
+
+                end
+
+                sigrecon = reshape(aux_sigrecon,[ncoils Nx Ny nsli ETL]);
+            else
+                if allSliceTest == 'Fals'
+                    for coil=1:ncoils
+                        % 3.0 - Get kdata
+                        kdata = full_Kspace(:, :, coil,:,aux_sli);
+                        mask  = fullMask_Kspace(:, :, coil,:,aux_sli);
+    
+                        % 3.1 - Apply LORAKS
+                        if LORAKStest == 'P_loraks'
+                            sigrecon(coil,:,:,aux_sli,:) = P_LORAKS( kdata, mask, rankLORAKS );  % Under sampled Data, Mask, Rank
+                        elseif LORAKStest == 'ACloraks'
+                            sigrecon(coil,:,:,aux_sli,:) = AC_LORAKS( squeeze(kdata), squeeze(mask), rankLORAKS );  % Under sampled Data, Mask, Rank
+                        end
+                        fprintf(['  --  LORAKS recon slice: ',num2str(aux_sli) ,' / ' ,num2str(size(full_Kspace,5)) ,' for coil: ',num2str(coil),' / ',num2str(ncoils),'\n\n'])
+    
+                    end
+    
+                    for echo=1:ETL
+                        % 3.2 - get recon signal & image
+                        aux_kdata_PI(:,:,:,aux_sli,echo) = sigrecon(:,:,:,aux_sli,echo);
+    
+                        % 3.3 - Recon data
+                        aux_img_PI(:,:,:,aux_sli,echo)   = ifftshift(ifftshift(ifft(ifft(ifftshift(ifftshift(sigrecon(:,:,:,aux_sli,echo),2),3),[],2),[],3),2),3);
+    
+                        % 3.4 - Get data from all coils
+                        recon_Img_full(:,:,aux_sli,echo) = squeeze(sum(abs(aux_img_PI(:,:,:,aux_sli,echo).^2),1).^.5);  % LS method for coil combination % size(aux_img_PI) = 18 258 256 3 12
+    
+    
+                        fprintf(['  --  LORAKS recon for echo ',num2str(echo),' / ',num2str(ETL),'\n\n'])
+                    end
+
+                else  % All Slices
+                    slice = double(n_sli_vect(aux_sli));
+                    for coil=1:ncoils
+                        % 3.0 - Get kdata
+                        kdata = full_Kspace(:, :, coil,:,slice);
+                        mask  = fullMask_Kspace(:, :, coil,:,slice);
+    
+                        % 3.1 - Apply LORAKS
+                        if LORAKStest == 'P_loraks'
+                            sigrecon(coil,:,:,:) = P_LORAKS( kdata, mask, rankLORAKS );  % Under sampled Data, Mask, Rank
+                        elseif LORAKStest == 'ACloraks'
+                            sigrecon(coil,:,:,:) = AC_LORAKS( squeeze(kdata), squeeze(mask), rankLORAKS );  % Under sampled Data, Mask, Rank
+                        end
+                        fprintf(['  --  LORAKS recon slice: ',num2str(slice) ,' of ' ,num2str(aux_sli) , ' / ' ,num2str(size(full_Kspace,5)) ,' for coil: ',num2str(coil),' / ',num2str(ncoils),'\n\n'])
+    
+                    end
+    
+                    for echo=1:ETL
+                        % 3.2 - get recon signal & image
+                        aux_kdata_PI(:,:,:,echo) = sigrecon(:,:,:,echo);
+    
+                        % 3.3 - Recon data
+                        aux_img_PI(:,:,:,echo)   = ifftshift(ifftshift(ifft(ifft(ifftshift(ifftshift(sigrecon(:,:,:,echo),2),3),[],2),[],3),2),3);
+    
+                        % 3.5 - Get data from all coils
+                        Slice_recon_Img_full(:,:,echo)     = squeeze(sum(abs(aux_img_PI(:,:,:,echo).^2),1).^.5);  % LS method for coil combination % size(aux_img_PI) = 18 258 256 3 12
+    
+    
+                        fprintf(['  --  LORAKS recon for echo ',num2str(echo),' / ',num2str(ETL),'\n\n'])
+                    end
+
+                    % Save .mat file per slice
+                    cd(dir_slices)
+                    if AllSave == 'True'
+                        save(['sli_' num2str(slice) '_recon_matlab.mat'],'aux_kdata_PI','aux_img_PI')
+                    else
+                        save(['sli_' num2str(slice) '_recon_matlab_justImag.mat'],'Slice_recon_Img_full')
+                    end
+                    clear aux_kdata_PI aux_img_PI Slice_recon_Img_full mask kdata
+                    cd(data_dir)
+                end
+            end
+
+        end
+
+
+        % Load All results
+        recon_Img_full = zeros(Nx,Ny,nsli,ETL);
+        if allSliceTest == 'True'        
+            cd(dir_slices)
+            for aux_sli=1:size(full_Kspace,5)
+                if AllSave == 'True'
+                    load(['sli_' num2str(aux_sli) '_recon_matlab_justImag.mat']);
+                else
+                    load(['sli_' num2str(aux_sli) '_recon_matlab_justImag.mat']);
+                    recon_Img_full(:,:,aux_sli,:) = Slice_recon_Img_full;
+                end
+            end
+        end
+
+        % save nift
+        if niftTest == 'True'
+            v = recon_Img_full;
+
+            dir_prefilter = [data_dir '\imagResults_orig'];
+            mkdir(dir_prefilter)
+            cd(dir_prefilter)
+            niftiwrite(v,'imageRecon_prefilter.nii');
+            cd(data_dir)
         end
     end
-    
-elseif ParallelTest == 'LORAK'
-    % -------------- 2 - Get data for LORAK ----------    
-    % 2.1 - Parameters
-    accFactor  = double(R);
-    rankLORAKS = 45;
-    Ny         = Nx;
-    sigrecon   = zeros(ncoils,Nx,Ny,nsli,ETL);
-    
-    nsli = 1; % Avoid recon in all slices
-    % ------------- 3 - Apply LORAKS --------------------------
-    % Inputs:
-    %   -> kdata            - Reduced data set      (Nx, Ny, ncoils,ETL,nsli)  
-    %   -> mask             - Mask of full_kspace   (Nx, Ny, ncoils,ETL,nsli)
-    %   -> rankLORAKS       - Reducion Factor of LORAKS
-    % Ouputs
-    %   -> Full_Kspace - reconstructed image (Nx,Ny)
-    for sli=1:nsli
-        for coil=1:ncoils
-            % 3.0 - Get kdata
-            kdata = full_Kspace(:, :, coil,:,sli);
-            mask  = fullMask_Kspace(:, :, coil,:,sli);
 
-            % 3.1 - Apply LORAKS
-            sigrecon(coil,:,:,sli,:) = P_LORAKS( kdata, mask, rankLORAKS );  % Under sampled Data, Mask, Rank
-%             sigrecon(coil,:,:,sli,:) = AC_LORAKS( kdata, mask, rankLORAKS );  % Under sampled Data, Mask, Rank
+    save(['LORAKS_ALL_recon_matlab_justImag.mat'],'recon_Img_full')
 
-            fprintf(['  --  LORAKS recon slice: ',num2str(sli) ,' / ' ,num2str(nsli) ,' for coil: ',num2str(coil),' / ',num2str(ncoils),'\n\n'])            
-            
+elseif typeTest=='LOAD'
+
+    % Load data
+    if ParallelTest == 'GRAPP'
+        if AllSave == 'True'    
+            load('GRAPPA_recon_matlab.mat')
+        else
+            load('GRAPPA_recon_matlab_justImag.mat')
+        end 
+    elseif ParallelTest == 'LORAK'
+        if AllSave == 'True'                
+            load('LORAKS_recon_matlab')
+        else
+            load('LORAKS_ALL_recon_matlab_justImag.mat')
+            recon_Img_full = permute(recon_Img_full,[2 1 3 4]);            
         end
 
-        for echo=1:ETL
-            % 3.2 - get recon signal & image
-            sigrecon_full = sigrecon(:,:,:,sli,echo);
-            
-            % 3.3 - Recon data
-            out      = ifftshift(ifftshift(ifft(ifft(ifftshift(ifftshift(sigrecon(:,:,:,sli,echo),2),3),[],2),[],3),2),3);
-            
-            % 3.4 - Export
-            aux_kdata_PI(:,:,:,sli,echo) = sigrecon_full;
-            aux_img_PI(:,:,:,sli,echo)   = out;
-
-            % 3.5 - Get data from all coils
-            recon_Img_full(:,:,sli,echo) = squeeze(sum(abs(aux_img_PI(:,:,:,sli,echo).^2),1).^.5);  % LS method for coil combination % size(aux_img_PI) = 18 258 256 3 12
-% %             recon_Img_full(:,:,ii,jj) = squeeze(abs(sum(aux_img_PI(:,:,:,slice,echo).*conj(aux_img_PI(:,:,:,slice,echo)),ndims(aux_img_PI(:,:,:,slice,echo)))).^(1/2));
-                        
-            % save nift
-            if niftTest == 'True'
-                v(:,:,sli,echo) = recon_Img_full;
-
-                dir_prefilter = [data_dir '\imagResults_orig'];
-                mkdir(dir_prefilter)
-                cd(dir_prefilter)
-                niftiwrite(v,'imageRecon_prefilter.nii');
-                cd(data_dir)
-            end
-            
-            fprintf(['  --  LORAKS recon for echo ',num2str(echo),' / ',num2str(ETL),'\n\n'])            
-        end
+    elseif ParallelTest == 'noAcc'
+        load('reconData.mat');
+        recon_Img_full = image;
     end
     
+    if AllSave == 'True'    
+        % Permute data   
+        aux_img_PI    = permute(img_PI,[2 1 3 4 5]);   % Nx, Ny, coils, nslice, #echoes    
+%         aux_kdata_PI  = permute(kdata_PI,[2 1 3 4 5]);   % Nx, Ny, coils, nslice, #echoes    
+        [Nx,Ny,coils,nslice,ETL]= size(img_PI);
+        % Recon images
+        for sli=1:nslice
+            for echo=1:ETL
+                % 3.5 - Get data from all coils
+                recon_Img_full(:,:,sli,echo) = rot90(squeeze(sum(abs(aux_img_PI(:,:,:,sli,echo).^2),1).^.5));  % LS method for coil combination % size(aux_img_PI) = 18 258 256 3 12    
+                fprintf(['  --  ' ParallelTest ' recon for echo ',num2str(echo),' / ',num2str(ETL),'\n\n'])
+            end
+        end
+    end
+end
+toc
+
+% Re-ordering
+sliceVector = double(n_sli_vect);
+if size(sliceVector,2)~=double(nslices)
+    sliceVector = sliceVector(1:end-1);
+end
+recon_Img_full = recon_Img_full(:,:,sliceVector,:);
+% recon_Img_full_aux = recon_Img_full_aux(:,:,end:-1:1,:);
+
+
+%% ----------- 3 - Get Dicom -------------------------------
+
+% save dicom
+if dicomTest == 'True'
+    % load seq-info
+    load('sequence_info.mat')
+    aux_InstanceNumber = 1;
+    
+    % vector slices
+    aux_sliceLoc    = floor(double(nslices)/2);
+    vectLoc         = linspace(-st_exc*aux_sliceLoc,st_exc*(double(nslices/2)-1),nslices)*1e3;
+    n_sli_vect      = double(n_sli_vect) + 1;
+    vectorSlicOrder = double( n_sli_vect( find( double(nslices)>=n_sli_vect ) ) );
+
+    dir_prefilter   = [data_dir '\dicomIMG'];
+    mkdir(dir_prefilter)
+    cd(dir_prefilter)
+
+    for sli=1:nslices
+        for echo=1:nEcohs
+            filename=strcat('dicomIMG_sli',sprintf( '%02d', sli ),'_ech',sprintf( '%02d', echo ),'.dcm');
+            
+            % Save dicom
+            dataDicom = recon_Img_full(1:Nx,1:Ny,sli,echo);
+%             dicomwrite(dataDicom,filename);
+            
+            % Get Info            
+%             info = dicominfo(filename);
+            info.SliceLocation        = vectLoc(vectorSlicOrder(sli)); % mm
+            info.EchoNumbers          = echo;                          % #
+            info.SliceThickness       = st_exc*1e3;                    % mm
+            info.InstanceNumber       = aux_InstanceNumber;            % #
+            info.pixel_array          = squeeze(recon_Img_full(:,:,sli,echo));
+            info.SpacingBetweenSlices = st_exc*1e3;
+            info.Manufacturer         = 'Pulseq';
+            info.AcquisitionTime      = duration * 1e3;
+            info.EchoTime             = echo * TE * 1e3;
+            info.PixelSpacing         = [double(FOV)/double(Nx); double(FOV)/double(Ny)]*1e3;
+            dicomwrite((dataDicom*65535),filename,info,"CreateMode","copy");
+
+            % itt
+            aux_InstanceNumber = aux_InstanceNumber + 1;
+
+            sprintf('dicomIMG_sli%s_ech%s.dcm',num2str(sli),num2str(echo));      
+            
+        end
+    end
+
+    testInfo = dicominfo('dicomIMG_sli01_ech01.dcm');
+
+    % Create Zips
+    namezip = ['dicomIMG_test' num2str(double(test))];
+    zip(namezip,{'*.dcm'});
+    movefile([namezip '.zip'],data_dir)
+    cd(data_dir)
 end
 
-toc
+
+
 
 %% ----------- 4 - Get Figures -----------------------------
 % close all
 if plotTest == 'True'
     cd([data_dir '\results'])
-    % 4.1 - Kspace
-    figure() 
-    kspace_plot = squeeze(abs(aux_kdata_PI(1,:,:,slice,echo)));
-    imagesc(kspace_plot)
-    hold on, title(['K space'])
-    colormap gray
+    if AllSave == 'True'
+    
+        slice = 1;
+        % 3.1 - Kspace
+%         figure() 
+%         kspace_plot = squeeze(abs(aux_kdata_PI(1,:,:,slice,echo)));
+%         imagesc(kspace_plot)
+%         hold on, title(['K space'])
+%         colormap gray
+    
+        % 3.2 - Recon Images
+        fig1 = figure();
+        for sli =1:nsli
+            plotImageRecon = squeeze(sum(abs(aux_img_PI(:,:,:,sli, echo).^2),1).^.5);  % LS method for coil combination
+            subplot(1,nsli,sli)
+            imagesc(plotImageRecon,[0 .4])
+            hold on, title(['Slice = ',num2str(sli)])
+            colormap gray
+            caxis([ 0   max( max(plotImageRecon) ) ])
+        end    
+        saveas(fig1,'Recon_image_&_echos.png')
+    
+    end
 
-    % 4.2 - Recon Images
-    fig1 = figure();
-    for sli =1:nsli
-        plotImageRecon = squeeze(sum(abs(aux_img_PI(:,:,:,sli,echo).^2),1).^.5);  % LS method for coil combination
-        subplot(1,nsli,sli)
-        imagesc(plotImageRecon,[0 .4])
-        hold on, title(['Slice = ',num2str(sli)])
-        colormap gray
-        caxis([ 0   max( max(plotImageRecon) ) ])
-    end    
-    saveas(fig1,'Recon_image_&_echos.png')
-
-
-
-    % 4.3 - Montage per echo
+    % 3.3 - Montage per echo
     fig2 = figure();
-    subplot(121)
-    h = montage(mat2gray(squeeze(abs(recon_Img_full(:,:,1,:)))));
+    subplot(131)
+%     h = montage(mat2gray(squeeze(abs(rot90(recon_Img_full(:,:,1,:))))));
+    h = montage(mat2gray(squeeze(abs((recon_Img_full(:,:,1,:))))));
     title(['All Echos - Recon ' ParallelTest])
-    subplot(122)
-    imagesc(recon_Img_full(:,:,1,1))
-    colormap gray
+    subplot(132)
+% %     imagesc(rot90(recon_Img_full(:,:,1,1)))
+    imagesc((recon_Img_full(:,:,1,1)))
     title(['1st Echos - 1st Slice Recon ' ParallelTest])
+
+    subplot(133)
+% %     imagesc(rot90(recon_Img_full(:,:,1,1)))
+    plot(squeeze((recon_Img_full(103,81,1,:))))
+    title(['Decay signal pos [103,181]'])
+
+    colormap gray
     saveas(fig2,'Recon_1slice.png')
 
+    % 3.4 - Montage per echo
+    fig3 = figure();
+    h = montage(mat2gray(squeeze(abs((recon_Img_full(:,:,:,1))))));
+    title(['All Slices - Recon ' ParallelTest])
+
+
+    % Aux Figures
+    fig4 = figure();
+    h = montage(mat2gray(squeeze(abs(rot90(recon_Img_full(:,:,:,1),1)))));
+% %     h = montage(mat2gray(squeeze(abs(flip(recon_Img_full(:,:,:,1),2)))));
+    title(['All Slices - Recon ' ParallelTest])  
+% % 
+% %     % 3.2 - Recon Images
+% %     fig1 = figure();
+% %     for sli =1:nsli
+% %         plotImageRecon = mat2gray(squeeze(abs((recon_Img_full_aux(:,:,sli,1)))));  
+% %         subplot(4,4,sli)
+% %         imagesc(plotImageRecon,[0 .4])
+% %         hold on, title(['Slice = ',num2str(sli)])
+% %         colormap gray
+% %         caxis([ 0   max( max(plotImageRecon) ) ])
+% %     end
+% %     saveas(fig1,'Recon_image_&_echos.png')
+
+
+% %     subplot(132)
+% % % %     imagesc(rot90(recon_Img_full(:,:,1,1)))
+% %     imagesc((recon_Img_full(:,:,1,1)))
+% %     title(['1st Echos - 1st Slice Recon ' ParallelTest])
+% % 
+% %     subplot(133)
+% % % %     imagesc(rot90(recon_Img_full(:,:,1,1)))
+% %     plot(squeeze((recon_Img_full(103,81,1,:))))
+% %     title(['Decay signal pos [103,181]'])
+
+    colormap gray
+    saveas(fig3,'Recon_Allslice.png')
+
+    fig4 = figure();    
+    for aux_sli=1:size(full_Kspace,5)
+        subplot(3,5,aux_sli)
+        imagesc(rot90(recon_Img_full(:,:,aux_sli,1)))
+        title(['Sli' num2str(aux_sli)])
+        colormap gray       
+    end
 end
+    
+
     
 
 %% -------------- 4.5 - Get mask  ------------------------------    
@@ -304,21 +613,25 @@ end
 
 %% ------------ 5 - Save kdata and img ----------------------
 cd(data_dir)
-kdata_PI = permute(aux_kdata_PI,[2 1 3 4 5]); % Nx, Ny, coils, nslice, #echoes
-img_PI   = permute(aux_img_PI,[2 1 3 4 5]);   % Nx, Ny, coils, nslice, #echoes
 
-if ParallelTest == 'SENSE'
+if typeTest=='PROC'
+    if AllSave == 'True'
+%         kdata_PI = permute(aux_kdata_PI,[2 1 3 4 5]); % Nx, Ny, coils, nslice, #echoes
+        img_PI   = permute(aux_img_PI,[2 1 3 4 5]);   % Nx, Ny, coils, nslice, #echoes
 
-elseif ParallelTest == 'GRAPP'
-    save('GRAPPA_recon_matlab.mat','kdata_PI','img_PI')
-    filename = 'reconGRAPPA_imag';
-    fprintf(['  --  GRAPPA recon Performed and Saved  -- \n\n'])
-elseif ParallelTest == 'LORAK'
-    save('LORAKS_recon_matlab.mat','kdata_PI','img_PI')
-    filename = 'reconLORAKS_imag';
-    fprintf(['  --  LORAKS recon Performed and Saved  -- \n\n'])
+        if ParallelTest == 'SENSE'
+
+        elseif ParallelTest == 'GRAPP'
+            save('GRAPPA_recon_matlab.mat','kdata_PI','img_PI')
+            filename = 'reconGRAPPA_imag';
+            fprintf(['  --  GRAPPA recon Performed and Saved  -- \n\n'])
+        elseif ParallelTest == 'LORAK'
+            save('LORAKS_recon_matlab.mat','kdata_PI','img_PI')
+            filename = 'reconLORAKS_imag';
+            fprintf(['  --  LORAKS recon Performed and Saved  -- \n\n'])
+        end
+    end
 end
-    
     %% -------------- 6 - Filter image ------------------------------
 % % %     if filterTest == 'True'
 % % %         % 5.0 - normal
@@ -515,16 +828,31 @@ end
 %% ------------ 8 - Save Nifti images and mask ---------------
 
 if niftTest == 'True'
-    mkdir([data_dir '\imagResults_preproc'])
+    mkdir([data_dir '\imagResults_nifti'])
     % Combine coils
-    for eco=1:size(aux_img_PI,5)
-        recon_Img_full(:,:,eco) = squeeze(sum(abs(aux_img_PI(:,:,:,slice,echo).^2),1).^.5);  % LS method for coil combination
+    if AllSave == 'True'
+        for eco=1:size(aux_img_PI,5)
+            recon_Img_full(:,:,eco) = squeeze(sum(abs(aux_img_PI(:,:,slicePlot,echo).^2),1).^.5);  % LS method for coil combination
+        end
     end
-    
+
+    [~,~,nslices,ETL] = size(recon_Img_full);
     % Save images as Nifti
-    cd([data_dir '\imagResults_orig'] )
-    niftiwrite(recon_Img_full,filename)
-    
+    cd([data_dir '\imagResults_nifti'] )
+    for sli = 1 :nslices
+        filename = ['nifti_Data_Knee_sli' num2str(sli)];
+        if ParallelTest == 'noAcc'
+            niftiwrite(  permute(rot90(recon_Img_full(:,end:-1:1,sli,:),1), [1, 2, 4, 3])  ,filename)           
+        else
+% %             figure()
+% %             imagesc(squeeze(  rot90(recon_Img_full(:,end:-1:1,1,1))   ))
+% %             colormap gray
+% %             niftiwrite(  rot90(recon_Img_full(end:-1:1,end:-1:1,1,1))  ,filename)
+
+            niftiwrite(  permute(recon_Img_full(:,end:-1:1,sli,:), [1, 2, 4, 3])  ,filename)
+        end
+    end
+
     % Get mask & save as Nifti
     if maskTest == 'True'
         % save nifti
@@ -536,7 +864,6 @@ if niftTest == 'True'
 end
 
 %% 9 - END
-load('sequence_info.mat')
 fprintf(['  --  MSE_preproc_recon_vf.m - for test' num2str(test) ' Finnished!  -- \n\n'])
 
 load handel
