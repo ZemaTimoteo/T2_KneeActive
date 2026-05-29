@@ -2,8 +2,8 @@ T2_KneeActive - Reconstruction Pipeline
 
 -----------------
 
-Get T2 maps (for Phantom data, but works similarly for Knee Images) - Get T2 maps & values within each vial mask for T2me MSE data:
-	1. Create a folder for subject and create subfolders
+Get T2 maps (for Phantom data, but works similarly for Knee Images) - Get T2 maps & values within each vial mask/Knee Articular Cartilage mask for MSE '.dat' data:
+	1. Create a folder for the subject and create subfolders
 		1.Subfolder: 'imagResults_orig'
 		2.Subfolder: 'imagResults_preproc'
 		3.Subfolder: 'results'
