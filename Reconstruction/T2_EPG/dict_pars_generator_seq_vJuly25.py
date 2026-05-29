@@ -48,11 +48,11 @@ from scipy.io import savemat
 from tkinter import *
 from tkinter import filedialog
 
-sys.path.append('GitHub/Reconstruction/T2_EPG')  # Add functions from mytoolbox
-from Proc_epg import Proc_epg
+sys.path.append('Github/Reconstruction/T2_EPG')  # Add functions from mytoolbox
+from Proc_epg_vComplex import Proc_epg_vComplex
 from slr_profile_seq_vJuly24 import slr_profile_seq_vJuly24
 
-def dict_pars_generator_seq_vJuly24(T1,T2,B1,ESP, ETL,phase_exc,phase_refoc,FA_exc,FA_refoc,ST_exc,ST_refoc,Tsinc,Tsymm, Npoints, dir_rf, SLR=True):
+def dict_pars_generator_seq_vJuly25(T1,T2,B1,ESP, ETL,phase_exc,phase_refoc,FA_exc,FA_refoc,ST_exc,ST_refoc,Tsinc,Tsymm, Npoints, dir_rf, SLR=True):
 
     # =============================================================================
     # %% --- 1 - initialization of variable
@@ -60,7 +60,7 @@ def dict_pars_generator_seq_vJuly24(T1,T2,B1,ESP, ETL,phase_exc,phase_refoc,FA_e
     refoc_pulse     = []
     exc_pulse       = []
     FA_refocUNIQUE  = np.unique(FA_refoc, 'stable')
-    Dict = np.zeros(  (ETL, int((T2.shape)[0] * phase_exc.shape[0] * B1.shape[0]))  )
+    Dict = np.zeros(  (ETL, int((T2.shape)[0] * phase_exc.shape[0] * B1.shape[0]))  ,  dtype=np.complex64  )
 
     # =============================================================================
     # %% --- 2 - Slice profile with SLR method + Dictionary
@@ -71,7 +71,7 @@ def dict_pars_generator_seq_vJuly24(T1,T2,B1,ESP, ETL,phase_exc,phase_refoc,FA_e
         # print(jj)
         # ... 2.2 - slice profile considering SLR profile ...
         if SLR:
-            refoc_pulse = np.zeros((Npoints, ETL))
+            refoc_pulse = np.zeros((Npoints, ETL) , dtype=np.complex64)
 
             #fig = plt.figure(1)
             for ii in range(FA_refoc.shape[0]): # only accept one FA_refoc
@@ -92,7 +92,7 @@ def dict_pars_generator_seq_vJuly24(T1,T2,B1,ESP, ETL,phase_exc,phase_refoc,FA_e
 
             # Dict = Proc_epg(exc_pulse, refoc_pulse, phase_exc, phase_refoc, T1, T2, ESP, ETL)
             # add the entry to LargePhant_dic
-            Dict[:, jj * int((T2.shape)[0]) * phase_exc.shape[0]: (jj+1) * int((T2.shape)[0]) * phase_exc.shape[0]] = np.squeeze(  Proc_epg(exc_pulse, refoc_pulse, phase_exc, phase_refoc, T1, T2, ESP, ETL)  ) # add the entry  to LargePhant_dic
+            Dict[:, jj * int((T2.shape)[0]) * phase_exc.shape[0]: (jj+1) * int((T2.shape)[0]) * phase_exc.shape[0]] = np.squeeze(  Proc_epg_vComplex(exc_pulse, refoc_pulse, phase_exc, phase_refoc, T1, T2, ESP, ETL)  ) # add the entry  to LargePhant_dic
 
 
             print('\n\n   -> B1: ',jj+1,'/',B1.shape[0], 'test')
@@ -104,7 +104,7 @@ def dict_pars_generator_seq_vJuly24(T1,T2,B1,ESP, ETL,phase_exc,phase_refoc,FA_e
             refoc_pulse = FA_refoc * B1[jj] * (math.pi/180)
             refoc_pulse = np.transpose(refoc_pulse)
             # Dict = Proc_epg(np.array([exc_pulse]), np.array([refoc_pulse]), np.array([phase_exc]), np.array([phase_refoc]), T1, T2, ESP, ETL)
-            Dict[:, jj * int((T2.shape)[0]) * phase_exc.shape[0]: (jj+1) * int((T2.shape)[0]) * phase_exc.shape[0]] = np.squeeze(  Proc_epg(np.array([exc_pulse]), np.array([refoc_pulse[0]]), np.array([phase_exc]), np.array([phase_refoc]), T1, T2, ESP, ETL)   ) # add the entry  to LargePhant_dic
+            Dict[:, jj * int((T2.shape)[0]) * phase_exc.shape[0]: (jj+1) * int((T2.shape)[0]) * phase_exc.shape[0]] = np.squeeze(  Proc_epg_vComplex(np.array([exc_pulse]), np.array([refoc_pulse[0]]), np.array([phase_exc]), np.array([phase_refoc]), T1, T2, ESP, ETL)   ) # add the entry  to LargePhant_dic
 
 
     # =============================================================================
@@ -112,7 +112,7 @@ def dict_pars_generator_seq_vJuly24(T1,T2,B1,ESP, ETL,phase_exc,phase_refoc,FA_e
     # =============================================================================
     #
         # ... 3.1 - initialization    of    variables: ...
-    pars = np.zeros( (int((T2.shape)[0]) * phase_exc.shape[0] * B1.shape[0], 3))
+    pars = np.zeros( (int((T2.shape)[0]) * phase_exc.shape[0] * B1.shape[0], 3) ,  dtype=np.complex64  )
 
         # ... 3.2 - Get variable pars (contains the values of T2, the phase of the 90º RF (phi) and the values of B1) ...
     for j in range(0,pars.shape[0], int((T2.shape)[0]) * phase_exc.shape[0]):

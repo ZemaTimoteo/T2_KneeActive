@@ -113,6 +113,7 @@ def slr_profile_seq_vJuly24(FA_exc, B1,FA_refoc, ST_exc, ST_refoc,Tsinc,Tsymm, N
         nameRFrefsave = nameRFrefsave[:-2]
     nameRFrefsave = nameRFrefsave + "_sinc{}".format(Tsinc) + "_st{}".format(ST_refoc*1e3) + "mm"
     nameRFrefsave = nameRFrefsave.replace(".", "_")
+    nameRFrefsave = nameRFrefsave + ".mat"
     rf_refoc = scipy.io.loadmat(nameRFrefsave)
     aux_rf_refoc = rf_refoc['rf_ref'][0][0]
     aux_t_refoc  = rf_refoc['t_ref'][0][0]

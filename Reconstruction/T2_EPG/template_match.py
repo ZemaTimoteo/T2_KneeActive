@@ -38,8 +38,6 @@ from scipy.io import savemat
 from tkinter import *
 from tkinter import filedialog
 
-sys.path.append('D:/Tiago/Trabalho/2021_2025_PhD/Projects/qMRI_Joint/Code/pythonCode/Reconstruction/T2_EPG')  # Add functions from mytoolbox
-from Proc_epg import Proc_epg
 
 def template_match(S,X):
 
