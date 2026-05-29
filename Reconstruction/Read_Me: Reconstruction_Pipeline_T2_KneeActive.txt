@@ -13,7 +13,8 @@ Get T2 maps (for Phantom data, but works similarly for Knee Images) - Get T2 map
 	5. Recon GRAPPA or LORAKS: Run matlab code - 'Github\Reconstruction\MSE_preproc_recon_Phantom.m' OR 'Github\Reconstruction\MSE_preproc_recon_Knee.m'
 	6. Get mask for the 14 vials or for knee (in the examples, segmentation was already performed)
 	7. Run python to generate maps for each vial - 'Github\Reconstruction\T2_EPG\T2_MSE_EPG_Phantom.py' or 'Github\Reconstruction\T2_EPG\T2_MSE_EPG.py'
-		 (change directories within the functions for calling the respective resources, inside the following functions: 'template_match.py' - changing GitHub/ Reconstruction by where you added the repousitory)
+		 (change directories within the functions for calling the respective resources, inside the following functions: 'template_match.py' - changing 'GitHub/
+Reconstruction' by where you added the repository).
 	8. The code automaticly saves '.mat' files with maps for each vial (Phantom) or for each slice (Knee)
 
 
