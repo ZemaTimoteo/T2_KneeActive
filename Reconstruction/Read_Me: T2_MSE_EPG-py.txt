@@ -1,4 +1,4 @@
-Github - Correr MSE Dictionary Mapping
+Github - Correr MSE Dictionary Mapping for Dicom data from Siemens scanner
 
 1 - Create a structure of folder with: 'dicom', 'segmentation', 'results'
 2 - Copy files from scanner in DICOM for the 'Data' Folder
