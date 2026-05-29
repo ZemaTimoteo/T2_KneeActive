@@ -80,17 +80,19 @@ if params.methodDic == 'SLR_Prof'
     
 % 2.2 - Just Dictionary                        
 elseif params.methodDic == 'JUSTdict' 
-    exc_puls                   = params.alpha_exc; % Flip Angle in (rad)
+    exc_puls                  = params.alpha_exc; % Flip Angle in (rad)
     [~, x ]= CF_Mycode_epg_derivatives_NLO_AUC(...
                             ETL, beta, ...
                             T1, T2, exc_puls, ...
                             FA, params, gamma); % [dF_dalphaL,dF_dbeta]  
 end
 
-
-%% ... 3 - CRLB & Signal ...
+%% ... 3 - Signal ...
     % --- 3.1 Signal ---
 data.signal = abs(x);
+
+
+
 
 end
 

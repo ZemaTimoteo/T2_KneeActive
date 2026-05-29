@@ -22,7 +22,7 @@ FA    = x(2:end);          % Flip Angle constant (rad)
 
 % 0.2 - Other parameters
 res    = params.res * params.accFactor;     % Resolution by Accelerator Factor (only acquired the ones needed - GRAPPA)
-nsli   = params.nsli;                       % Number of slices
+nsli   = params.TotalSlices;                % Number of slices
 B1     = params.B1;                         % B1 value - TODO change
 T1     = params.T1;                         % T1 (ms)
 T2     = params.T2;                         % T2 (ms)
@@ -93,11 +93,30 @@ end
 
 % % [~, x ]= CF_Mycode_epg_derivatives_NLO_AUC(ETL, beta, ...
 % %     T1, T2, alpha_RF, FA, params, gamma); % [dF_dalphaL,dF_dbeta]
-
+% % x = x./norm(x);
 
 %% ... 3 - Area Under the Curve (Trapezoid)
+% data.AUC = 0;
+% for ii=2:ETL
+%     aux_AUC  = (  real(x(ii-1) - params.noise)   +  real(x(ii) - params.noise)  ) /2   *   beta;
+%     data.AUC = data.AUC  +   aux_AUC;
+% end
+
+
+% Normalize to 130% of Curve from the T2 value
 data.AUC = 0;
-for ii=2:ETL
+[~,idx2] = find([beta:beta:beta*ETL]>T2*1.6);
+
+if isempty(idx2)
+    AUC_points = ETL;
+else
+    AUC_points  = idx2(1);
+    TimeEva     = AUC_points*TE;
+end
+
+% AUC_points = ETL;
+
+for ii=2:AUC_points    
     aux_AUC  = (  real(x(ii-1) - params.noise)   +  real(x(ii) - params.noise)  ) /2   *   beta;
     data.AUC = data.AUC  +   aux_AUC;
 end

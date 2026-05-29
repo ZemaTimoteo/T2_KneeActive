@@ -7,7 +7,7 @@ function [TR,T_scan_m] = Constraint_test_Time(x,ETL,params)
 %% 1 - Import a seq file to compute SAR for
 % ... 1.05 - Parameters from input ...
 accFactor = params.accFactor;   % Factor of Acceleration for GRAPPA
-nsli      = params.nsli;        % number of slices - '30'
+nsli      = params.TotalSlices; % number of slices - '30'
 res       = params.res;         % Resolution Nx = Ny
 TR        = params.TRini;       % (ms)
 

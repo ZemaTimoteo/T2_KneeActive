@@ -1,8 +1,7 @@
-function [VarT2, epg] = Constraint_test_CRLB(x,ETL,params)
-% Cost Function and Gradient obtained for the variance expected for a specific model/set of parameters
+function [constraintAUC] = Constraint_PS_AUC(x,ETL,params)
 %
 % Functions used:
-%   Constraint_PS_CRLB: to generate the constraint of CRLB for
+%   Constraint_PS_AUC: to generate the constraint of AUC for
 %   Patternsearch
 %
 % Inputs:
@@ -10,8 +9,7 @@ function [VarT2, epg] = Constraint_test_CRLB(x,ETL,params)
 %   ETL
 %   params - parameters
 % Ouputs:
-%   Constraint of CRLB: Variance with respect to T2 estimation - Cannot be
-%       smaller than
+%   Constraint of AUC: Area Under the Curve - Cannot be smaller than
 % 
 %  @TiagoTFernandes, IST, Oct23
 
@@ -39,20 +37,16 @@ alpha_RF = params.alpha_RF; % Flip Angle in (rad)
 
 %% 1 - Get gamma and d_gamma
 % 1.1 - gamma thetformulation
-numer_gamma_beta = (  1 - exp( - ( ( sigma1/2 + (1/2+ETL)*beta )*(nsli-1)+sigma2*nsli) / T1 ) )  ^ 2;
-denom_gamma_beta = (sigma3^2/res) * sqrt( (sigma1/2 + ( 1/2 + ETL )*beta + sigma2)*nsli*res);
+numer_gamma_beta = (  1 - exp( - ( ( sigma1/2 + (1/2+ETL)*beta )*(nsli-1)+sigma2*nsli) / T1 ) ) ;
+denom_gamma_beta = sigma3 * sqrt(res) * (  (sigma1/2 + ( 1/2 + ETL )*beta + sigma2)*nsli  )^(3/2);
 gamma.gamma_beta = numer_gamma_beta / denom_gamma_beta;
 
 % 1.2 - Derivative of gamma in order to beta (ms)
-d_numer_gamma_beta_dbeta = (  2*(1/2 + ETL)    *    (-1 + nsli)  *  exp(  (  -nsli*sigma2 - (-1 + nsli)*( sigma1/2 + (1/2 + ETL)*beta ) ) / T1  )  * ...
-                              ( 1 - exp(  (-nsli*sigma2 - (-1 + nsli)*(sigma1/2 + (1/2 + ETL)*beta))/T1  ) ) ...
-                             ) /  T1;
-d_denom_gamma_beta_dbeta = ((1/2 + ETL) * nsli * sigma3^2) / (  sqrt(2)*sqrt(nsli*res * (sigma1 + 2*sigma2 + beta + 2*ETL*beta))  );
+d_denom_gamma_beta_dbeta = ( (1/2 + ETL)*(nsli-1) / T1 ) * exp( - ( (sigma1/2 + (1/2 + ETL)*beta)*(nsli-1) + sigma2*nsli ) / T1 );
+d_denom_gamma_beta_dbeta = sigma3 * sqrt(res) * (3/2) * nsli * (1/2 + ETL) * ( (sigma1/2 + (1/2 + ETL)*beta + sigma2) * nsli )^(1/2);
 
-
-gamma.dgamma_beta = ( denom_gamma_beta * d_numer_gamma_beta_dbeta  - numer_gamma_beta * d_denom_gamma_beta_dbeta) / ...
+gamma.dgamma_beta = ( denom_gamma_beta  * d_denom_gamma_beta_dbeta  - numer_gamma_beta * d_denom_gamma_beta_dbeta) / ...
                          (denom_gamma_beta^2)  ;
-
                      
 %% ... 2 - Calculate Gradients (derivatives) of EPG
 % 2.1 - Dictionary with SLR Profile
@@ -71,40 +65,56 @@ if params.methodDic == 'SLR_Prof'
     s_epg = [];
     s_grad_ds_dT2 = [];
     for z=1:size(refoc_puls,1)
-        [aux_grad, aux_x ] = CF_Mycode_epg_derivatives_NLO_AUC(...
+        [~, aux_x ] = CF_Mycode_epg_derivatives_NLO_AUC(...
                                 ETL, beta, ...
                                 T1, T2, exc_puls(z), ...
                                 refoc_puls(z,:), params, gamma); % [dF_dalphaL,dF_dbeta]
         s_epg(:,z)         = aux_x;
-        ds_dT2(:,z)         = aux_grad.ds_dT2;
     end
     
-    signal                = sum(s_epg,2);
-    grad.ds_dT2           = sum(ds_dT2,2);
+    x           = sum(s_epg,2);
     
 % 2.2 - Just Dictionary                        
 elseif params.methodDic == 'JUSTdict' 
     exc_puls                   = params.alpha_exc; % Flip Angle in (rad)
-    [grad, signal ]= CF_Mycode_epg_derivatives_NLO_AUC(...
+    [~, x ]= CF_Mycode_epg_derivatives_NLO_AUC(...
                             ETL, beta, ...
                             T1, T2, exc_puls, ...
-                            FA, params, gamma); % [dF_dalphaL,dF_dbeta] 
+                            FA, params, gamma); % [dF_dalphaL,dF_dbeta]  
 end
 
-epg    = signal;  % signal from EPG
-ds_dT2 = grad.ds_dT2;   % derivative over T2
+%% ... 4 - Area Under the Curve (Trapezoid)
+% ... 4.1 - Get time vector ...
+% % timeVector = beta:beta:beta*ETL;
+% % AUC.auc    = trapz(timeVector,abs(x)');
 
-% % ds_dT2 = grad.ds_dT2./norm(grad.ds_dT2); % derivative over T2
+% ... 4.2 - Get it manually
+data.AUC = 0;
+
+% Normalize to 160% of Curve from the T2 value
+[~,idx2] = find([beta:beta:beta*ETL]>T2*1.6);
+
+if isempty(idx2)
+    AUC_points = ETL;
+else
+    AUC_points  = idx2(1);
+    TimeEva     = AUC_points*TE;
+end
 
 
-%% ... 3 - CRLB & Signal ...
-    % --- 3.1 Calculate CF value - Uncertainty of CRLB ---
-data.vardT2 = gamma.gamma_beta * (ds_dT2(:)'*ds_dT2(:));
 
-%% ... 4 - CRLB Constraint
+for ii=2:AUC_points
+    aux_AUC  = (  real(x(ii-1) - params.noise)   +  real(x(ii) - params.noise)  ) /2   *   beta;
+    data.AUC = data.AUC  +   aux_AUC;
+end
+
+% % % AUC compensate by delta T = ETL * TE
+% % data.AUC = data.AUC / (ETL * TE);
+
+%% ... 5 - AUC Constraint
 % Cannot be samller then (so it has to be negative cause result as to be bigger then standart)
-%                | maxVart2 with respect to specific T2 in constant FlipAngle approach
-VarT2 = data.vardT2;
+%                | maxAUC with respect to specific T2 in constant FlipAngle approach
+constraintAUC = - data.AUC + params.constr.minAUC;
 
 end
 

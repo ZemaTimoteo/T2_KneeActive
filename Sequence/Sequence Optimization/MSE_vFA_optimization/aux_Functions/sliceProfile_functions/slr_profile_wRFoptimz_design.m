@@ -58,11 +58,11 @@ end
 %% ------------------------------------------------------------------------
 % 2 - RF excitation waveform
     % 2.1 - Load RF excitation pulses from pypulseq
-% puls_exc = rf_ex.signal*gamma;  % RF_ex from pypulseq 
-% FA_ex    = pi/2*FA_scale;
-% puls_exc = puls_exc/sum(puls_exc)*FA_ex;
+puls_exc = rf_ex.signal*gamma;  % RF_ex from pypulseq 
+FA_ex    = rf_exc*FA_scale;
+puls_exc = puls_exc/sum(puls_exc)*FA_ex;
 G_ex     = gz_amplitude/(gamma*1e3) * 1e-1;           % G/cm - intensity of slice selection -> 0.74017 -> G = 7.40 mT/m
-puls_exc = rf_ex.signal*gamma * 1e-3 * FA_scale;      % mT
+% puls_exc = rf_ex.signal*gamma * 1e-3 * FA_scale;      % mT
 
 x_ex         = linspace(-5,5,npoints);
 [a_ex, b_ex] = abr(puls_exc,x_ex);
@@ -76,11 +76,11 @@ xvec_ex = gt2cm(x_ex,G_ex,t);
 % 3 - Echo waveform
 
     % 3.1 - Load RF refoc pulse from pypulseq
-% echo_2 = rf_ref.signal*gamma;  % RF_refoc from pypulseq 
-% FA_rf  = refoc*(pi/180)*FA_scale;   % convert refoc angle in rad
-% echo   = echo_2/sum(echo_2)*FA_rf;
+echo_2 = rf_ref.signal*gamma;  % RF_refoc from pypulseq 
+FA_rf  = refoc*(pi/180)*FA_scale;   % convert refoc angle in rad
+echo   = echo_2/sum(echo_2)*FA_rf;
 G_rf   = gzse_amplitude/(gamma*1e3) * 1e-1;         % G/cm - intensity of slice selection -> 0.74017 -> G = 7.40 mT/m
-echo   = rf_ref.signal*gamma * 1e-3 *  FA_scale;     % mT
+% echo   = rf_ref.signal*gamma * 1e-3 *  FA_scale;     % mT
 
 x_rf      = linspace(-5,5,npoints);
 [~, b_rf] = abr(echo,x_rf);

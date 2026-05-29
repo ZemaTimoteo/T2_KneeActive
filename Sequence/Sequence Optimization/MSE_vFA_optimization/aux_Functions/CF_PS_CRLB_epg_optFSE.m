@@ -22,7 +22,8 @@ FA    = x(2:end);          % Flip Angle (rad)
 
 % 1.2 - Other parameters
 res    = params.res * params.accFactor;     % Resolution by Accelerator Factor (only acquired the ones needed - GRAPPA)
-nsli   = params.nsli;                       % Number of slices
+% nsli   = params.nsli;                     % Number of slices
+nsli   = params.TotalSlices;                % Number of slices
 B1     = params.B1;                         % B1 value - TODO change
 T1     = params.T1;                         % T1 (ms)
 T2     = params.T2;                         % T2 (ms)
@@ -33,8 +34,6 @@ sigma3 = params.sigma3;                     % sigma of SNR
 
 % 1.3 - directories
 plotTest   = params.plotTest;
-file_path  = 'D:\Tiago\Trabalho\2021_2025_PhD\Projects\qMRI_Joint\Code\matlabCode\qMRI_tools\Sequence_Optimization';
-dir_data   = [file_path '\Data'];
 
 % 1.4 - Parameters for derivatives - Initialize
 beta     = TE;              % interecho spacing in (ms) - Full of echospacing (ESP) in (ms) = TE
@@ -43,14 +42,16 @@ exc_puls = params.alpha_exc; % Flip Angle in (rad)
 %% 1 - Get gamma and d_gamma
 % 1.1 - gamma thetformulation
 numer_gamma_beta = (  1 - exp( - ( ( sigma1/2 + (1/2+ETL)*beta )*(nsli-1)+sigma2*nsli) / T1 ) )  ^ 2;
-denom_gamma_beta = (sigma3^2/res) * sqrt( (sigma1/2 + ( 1/2 + ETL )*beta + sigma2)*nsli*res);
+denom_gamma_beta = (sigma3^2/res) * sqrt( (sigma1/2 + ( 1/2 + ETL )*beta + sigma2)*nsli*res); 
+% denom_gamma_beta = (sigma3^2/res) * sqrt( (sigma1/2 + ( 1/2 + ETL )*beta + sigma2)*nsli*res) * sqrt(res);
 gamma.gamma_beta = numer_gamma_beta / denom_gamma_beta;
 
 % 1.2 - Derivative of gamma in order to beta (ms)
 d_numer_gamma_beta_dbeta = (  2*(1/2 + ETL)    *    (-1 + nsli)  *  exp(  (  -nsli*sigma2 - (-1 + nsli)*( sigma1/2 + (1/2 + ETL)*beta ) ) / T1  )  * ...
                               ( 1 - exp(  (-nsli*sigma2 - (-1 + nsli)*(sigma1/2 + (1/2 + ETL)*beta))/T1  ) ) ...
                              ) /  T1;
-d_denom_gamma_beta_dbeta = ((1/2 + ETL) * nsli * sigma3^2) / (  sqrt(2)*sqrt(nsli*res * (sigma1 + 2*sigma2 + beta + 2*ETL*beta))  );
+d_denom_gamma_beta_dbeta = ((1/2 + ETL) * nsli * sigma3^2 ) / (  sqrt(2)*sqrt(nsli*res * (sigma1 + 2*sigma2 + beta + 2*ETL*beta))  );
+% d_denom_gamma_beta_dbeta = ((1/2 + ETL) * nsli * sigma3^2 * sqrt(res) ) / (  sqrt(2)*sqrt(nsli*res * (sigma1 + 2*sigma2 + beta + 2*ETL*beta))  );
 
 
 gamma.dgamma_beta = ( denom_gamma_beta * d_numer_gamma_beta_dbeta  - numer_gamma_beta * d_denom_gamma_beta_dbeta) / ...

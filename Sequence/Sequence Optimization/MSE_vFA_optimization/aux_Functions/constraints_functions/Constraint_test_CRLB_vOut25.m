@@ -39,20 +39,16 @@ alpha_RF = params.alpha_RF; % Flip Angle in (rad)
 
 %% 1 - Get gamma and d_gamma
 % 1.1 - gamma thetformulation
-numer_gamma_beta = (  1 - exp( - ( ( sigma1/2 + (1/2+ETL)*beta )*(nsli-1)+sigma2*nsli) / T1 ) )  ^ 2;
-denom_gamma_beta = (sigma3^2/res) * sqrt( (sigma1/2 + ( 1/2 + ETL )*beta + sigma2)*nsli*res);
+numer_gamma_beta = (  1 - exp( - ( ( sigma1/2 + (1/2+ETL)*beta )*(nsli-1)+sigma2*nsli) / T1 ) ) ;
+denom_gamma_beta = sigma3^2 * sqrt(res) * (  (sigma1/2 + ( 1/2 + ETL )*beta + sigma2)*nsli  )^(3/2);
 gamma.gamma_beta = numer_gamma_beta / denom_gamma_beta;
 
 % 1.2 - Derivative of gamma in order to beta (ms)
-d_numer_gamma_beta_dbeta = (  2*(1/2 + ETL)    *    (-1 + nsli)  *  exp(  (  -nsli*sigma2 - (-1 + nsli)*( sigma1/2 + (1/2 + ETL)*beta ) ) / T1  )  * ...
-                              ( 1 - exp(  (-nsli*sigma2 - (-1 + nsli)*(sigma1/2 + (1/2 + ETL)*beta))/T1  ) ) ...
-                             ) /  T1;
-d_denom_gamma_beta_dbeta = ((1/2 + ETL) * nsli * sigma3^2) / (  sqrt(2)*sqrt(nsli*res * (sigma1 + 2*sigma2 + beta + 2*ETL*beta))  );
+d_denom_gamma_beta_dbeta = ( (1/2 + ETL)*(nsli-1) / T1 ) * exp( - ( (sigma1/2 + (1/2 + ETL)*beta)*(nsli-1) + sigma2*nsli ) / T1 );
+d_denom_gamma_beta_dbeta = sigma3^2 * sqrt(res) * (3/2) * nsli * (1/2 + ETL) * ( (sigma1/2 + (1/2 + ETL)*beta + sigma2) * nsli )^(1/2);
 
-
-gamma.dgamma_beta = ( denom_gamma_beta * d_numer_gamma_beta_dbeta  - numer_gamma_beta * d_denom_gamma_beta_dbeta) / ...
+gamma.dgamma_beta = ( denom_gamma_beta  * d_denom_gamma_beta_dbeta  - numer_gamma_beta * d_denom_gamma_beta_dbeta) / ...
                          (denom_gamma_beta^2)  ;
-
                      
 %% ... 2 - Calculate Gradients (derivatives) of EPG
 % 2.1 - Dictionary with SLR Profile

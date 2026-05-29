@@ -94,10 +94,26 @@ end
 
 % ... 4.2 - Get it manually
 data.AUC = 0;
-for ii=2:ETL
+
+% Normalize to 160% of Curve from the T2 value
+[~,idx2] = find([beta:beta:beta*ETL]>T2*1.6);
+
+if isempty(idx2)
+    AUC_points = ETL;
+else
+    AUC_points  = idx2(1);
+    TimeEva     = AUC_points*TE;
+end
+
+
+
+for ii=2:AUC_points
     aux_AUC  = (  real(x(ii-1) - params.noise)   +  real(x(ii) - params.noise)  ) /2   *   beta;
     data.AUC = data.AUC  +   aux_AUC;
 end
+
+% % % AUC compensate by delta T = ETL * TE
+% % data.AUC = data.AUC / (ETL * TE);
 
 %% ... 5 - AUC Constraint
 % Cannot be samller then (so it has to be negative cause result as to be bigger then standart)
