@@ -43,7 +43,7 @@ We use the following toolboxes (available in this github):
     openjournals/joss-reviews#2478
 
 
-** To run the Matlab codes, download and add the following toolboxes to the Tools folder:
+** To run the Matlab codes, download and add the following toolboxes to the Tools folder (those that which are in '.zip' files, perform, 'unzip'):
 
 
 
