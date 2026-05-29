@@ -3,4 +3,4 @@
     Pulseq     | Maxime Zaitsev - https://github.com/pulseq/pulseq - version 1.4.0
 	MonteCarlo_simTool
 
-	-> Unzip rf_tools - in order to have the rf pulses shapes
+	-> Unzip .zip files (rf_tools - in order to have the rf pulses shapes, Pulseq, ect...)
