@@ -1,6 +1,6 @@
 ----------------  T2_KneeActive - (**T2 Knee** **Ac**cessible Quantita**tive**)  ------------------------
 
-<img width="631" height="463" alt="fig6 (1)" src="https://github.com/user-attachments/assets/6004c45b-7c3c-43e8-ad9c-4a28892a50ed" />
+<img width="627" height="416" alt="T2_KneeActive" src="https://github.com/user-attachments/assets/fdb531f5-30e6-4d0e-b233-b2f707b6205f" />
 
 
 INTRODUCTION
